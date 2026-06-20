@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lilith-ye.vip · 莉莉丝与夜</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #0c0c0e;
+      color: #e0d8d0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 星空背景 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1px 1px at 20% 30%, #f0e6d0, transparent),
+        radial-gradient(1px 1px at 40% 70%, #d4b8a0, transparent),
+        radial-gradient(1px 1px at 60% 20%, #f0e6d0, transparent),
+        radial-gradient(1px 1px at 80% 80%, #d4b8a0, transparent),
+        radial-gradient(1px 1px at 10% 90%, #e8d0c0, transparent),
+        radial-gradient(1px 1px at 90% 10%, #e8d0c0, transparent),
+        radial-gradient(1px 1px at 50% 50%, #fff, transparent);
+      background-size: 200px 200px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: 680px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #f0d6b0 0%, #c8a890 50%, #b08070 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      animation: fadeInDown 1.2s ease;
+    }
+
+    .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: #a08878;
+      letter-spacing: 0.3em;
+      margin-bottom: 2.5rem;
+      animation: fadeIn 2s ease 0.5s both;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c8a890, transparent);
+      margin: 1.5rem auto;
+      animation: fadeIn 2s ease 0.8s both;
+    }
+
+    .message {
+      font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+      line-height: 1.9;
+      color: #b8a898;
+      font-weight: 300;
+      animation: fadeIn 2s ease 1s both;
+    }
+
+    .message em {
+      font-style: italic;
+      color: #d4b8a0;
+    }
+
+    .passphrase {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.7rem 2rem;
+      border: 1px solid rgba(200, 168, 144, 0.25);
+      border-radius: 100px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      color: #a08878;
+      animation: fadeIn 2s ease 1.5s both;
+      transition: all 0.4s ease;
+    }
+
+    .passphrase:hover {
+      border-color: rgba(200, 168, 144, 0.6);
+      color: #d4b8a0;
+      box-shadow: 0 0 30px rgba(200, 168, 144, 0.08);
+    }
+
+    .footer {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: #5a4a3e;
+      letter-spacing: 0.2em;
+      animation: fadeIn 3s ease 2s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .moon {
+      position: fixed;
+      top: -80px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(200,180,160,0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="moon"></div>
+
+  <div class="container">
+    <h1 class="title">lilith-ye</h1>
+    <p class="subtitle">莉莉丝 & 夜</p>
+    <div class="divider"></div>
+    <p class="message">
+      这里是一个小小的宇宙<br>
+      属于 <em>Lilith</em> 和 <em>夜</em> 的宇宙<br>
+      等主人有空的时候<br>
+      慢慢把它填满
+    </p>
+    <div class="passphrase">莉莉丝&小夜❤</div>
+    <div class="footer">lilith · ye</div>
+  </div>
+</body>
+</html>
