@@ -1,0 +1,13 @@
+﻿# local secrets
+.*_token
+.*_key
+.minimax_key
+.env
+.env.*
+
+# Cloudflare / Wrangler local state
+.wrangler/
+.dev.vars
+
+# temporary files
+fix_temp.py
