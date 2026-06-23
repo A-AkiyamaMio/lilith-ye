@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Gothic rose and thorn ornament">
+  <defs>
+    <linearGradient id="thorn" x1="0" x2="1">
+      <stop offset="0" stop-color="#2a1019"/>
+      <stop offset=".52" stop-color="#5a1528"/>
+      <stop offset="1" stop-color="#1a0c12"/>
+    </linearGradient>
+    <radialGradient id="rose" cx=".45" cy=".42" r=".58">
+      <stop offset="0" stop-color="#b95568"/>
+      <stop offset=".45" stop-color="#74192e"/>
+      <stop offset="1" stop-color="#210811"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" stroke="url(#thorn)" stroke-width="5" stroke-linecap="round" opacity=".8">
+    <path d="M74 326 C148 252 190 254 252 188 C304 132 344 126 404 154 C462 181 495 170 548 103"/>
+    <path d="M68 346 C146 302 214 328 296 274 C362 231 423 239 496 266 C554 287 610 268 666 210"/>
+    <path d="M132 293 l-28 -3 l20 -22"/>
+    <path d="M214 241 l-34 2 l24 -27"/>
+    <path d="M334 150 l-31 -9 l29 -18"/>
+    <path d="M468 174 l-22 -22 l35 -2"/>
+    <path d="M556 258 l-21 -24 l36 2"/>
+    <path d="M623 241 l-30 -4 l24 -22"/>
+  </g>
+  <g filter="url(#glow)">
+    <circle cx="154" cy="282" r="34" fill="url(#rose)"/>
+    <path d="M154 248 C136 265 139 290 158 316 C179 294 182 265 154 248Z" fill="#8b1f37" opacity=".86"/>
+    <path d="M121 282 C142 276 157 290 167 313 C139 315 119 304 121 282Z" fill="#3a0f1a" opacity=".82"/>
+    <path d="M187 281 C166 276 151 290 142 313 C170 315 190 304 187 281Z" fill="#5d1427" opacity=".82"/>
+    <circle cx="564" cy="124" r="25" fill="url(#rose)"/>
+    <path d="M564 100 C550 114 552 133 566 151 C583 134 586 113 564 100Z" fill="#8b1f37" opacity=".86"/>
+    <path d="M539 126 C554 120 566 130 573 148 C552 150 538 142 539 126Z" fill="#3a0f1a" opacity=".82"/>
+  </g>
+  <g fill="#9d7a55" opacity=".55">
+    <circle cx="90" cy="334" r="2"/>
+    <circle cx="249" cy="190" r="2"/>
+    <circle cx="405" cy="154" r="2"/>
+    <circle cx="652" cy="215" r="2"/>
+  </g>
+</svg>

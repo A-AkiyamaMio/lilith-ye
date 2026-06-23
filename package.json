@@ -1,0 +1,11 @@
+{
+  "name": "lilith-ye-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:asset": "node scripts/generate-asset.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node tests/auth-model.test.js && node tests/static-content.test.js"
+  }
+}

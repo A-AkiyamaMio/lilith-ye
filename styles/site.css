@@ -1,0 +1,1078 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=UnifrakturCook:wght@700&family=IM+Fell+English:ital@0;1&display=swap");
+
+:root {
+  color-scheme: dark;
+  --bg: oklch(8% 0.025 318);
+  --ink: oklch(91% 0.026 42);
+  --soft: oklch(73% 0.038 18);
+  --muted: oklch(55% 0.04 340);
+  --line: oklch(78% 0.045 35 / 22%);
+  --gold: oklch(76% 0.091 75);
+  --rose: oklch(43% 0.18 18);
+  --blood: oklch(50% 0.24 22);
+  --violet: oklch(48% 0.13 306);
+  --panel: oklch(10% 0.03 318 / 82%);
+  --rail: 118px;
+  --lilith-bg-size: cover;
+  --lilith-bg-position: center center;
+  --eye-left-x: 70.9%;
+  --eye-left-y: 11.5%;
+  --eye-right-x: 73.3%;
+  --eye-right-y: 8.6%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: "IM Fell English", "Microsoft YaHei", "Noto Sans SC", serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+.intro-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  background: #000;
+  animation: curtainLift 5.4s cubic-bezier(.19, 1, .22, 1) forwards;
+  pointer-events: none;
+}
+
+.intro-crest {
+  width: min(620px, 82vw);
+  height: 150px;
+  background: url("../assets/title-crest-gothic.png") center / contain no-repeat;
+  opacity: 0;
+  filter: blur(10px);
+  animation: crestAppears 4.2s ease forwards;
+}
+
+.intro-name {
+  color: oklch(87% 0.045 38);
+  font: clamp(32px, 6vw, 78px) "UnifrakturCook", "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  text-shadow:
+    0 0 18px oklch(43% 0.18 18 / 44%),
+    0 0 44px oklch(48% 0.13 306 / 38%);
+  opacity: 0;
+  filter: blur(10px);
+  animation: nameAppears 4.4s ease forwards;
+}
+
+.intro-subtitle {
+  color: oklch(66% 0.055 42);
+  font: 13px Georgia, "Times New Roman", serif;
+  opacity: 0;
+  animation: subtitleAppears 4.2s ease .6s forwards;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#embers,
+.cursor-aura {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+#embers {
+  z-index: 2;
+  opacity: .78;
+}
+
+.cursor-aura {
+  z-index: 3;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), oklch(55% 0.24 22 / 18%), transparent 10rem);
+  mix-blend-mode: screen;
+  opacity: var(--aura, .32);
+  transition: opacity .24s ease;
+}
+
+.page-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+}
+
+.side-rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+  width: var(--rail);
+  border-right: 1px solid var(--line);
+  background: linear-gradient(180deg, oklch(3% 0.01 318 / 92%), oklch(8% 0.03 318 / 76%));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 18px;
+}
+
+.brand-mark {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  color: var(--gold);
+  text-decoration: none;
+  text-align: center;
+  font: 13px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+}
+
+.rose-sigil,
+.crest {
+  border: 1px solid oklch(76% 0.091 75 / 56%);
+  background: radial-gradient(circle, oklch(42% 0.2 20 / 34%), transparent 72%), oklch(5% 0.02 318 / 64%);
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+}
+
+.rose-sigil {
+  width: 34px;
+  height: 42px;
+}
+
+.rail-nav {
+  display: grid;
+  gap: 19px;
+  font: 13px "IM Fell English", Georgia, "Times New Roman", serif;
+}
+
+.rail-nav a {
+  color: var(--soft);
+  text-decoration: none;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.rail-nav a:hover,
+.rail-nav a[aria-current="page"] {
+  color: var(--gold);
+  transform: translateX(3px);
+}
+
+.music-toggle,
+.ghost-button {
+  border: 1px solid var(--line);
+  color: var(--soft);
+  background: oklch(7% 0.02 318 / 62%);
+}
+
+.music-toggle {
+  min-height: 46px;
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  font-size: 11px;
+}
+
+.music-toggle strong {
+  color: var(--gold);
+  letter-spacing: .08em;
+}
+
+main {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.login-stage {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  align-items: center;
+  padding: 48px clamp(24px, 6vw, 96px);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, oklch(3% 0.01 318 / 96%) 0%, oklch(5% 0.02 318 / 76%) 38%, oklch(8% 0.03 318 / 18%) 68%),
+    linear-gradient(180deg, transparent 0%, oklch(4% 0.02 318 / 82%) 100%),
+    url("../assets/lilith-wide-hero.png") var(--lilith-bg-position) / var(--lilith-bg-size) no-repeat;
+}
+
+.login-stage.accepting-night {
+  animation: castleApproach 2.5s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.ink-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background:
+    radial-gradient(circle at 63% 23%, oklch(0% 0 0 / 0%) 0 0, #000 1px),
+    #000;
+  pointer-events: none;
+  animation: inkVeil 5.3s cubic-bezier(.19, 1, .22, 1) forwards;
+}
+
+.ink-drop {
+  position: absolute;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 38%, oklch(0% 0 0 / 68%) 60%, #000 72%);
+  filter: blur(14px);
+  transform: scale(.05);
+  animation: inkBloom 4.8s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.ink-drop-a {
+  width: 46vw;
+  height: 46vw;
+  right: 23%;
+  top: 5%;
+  animation-delay: .35s;
+}
+
+.ink-drop-b {
+  width: 38vw;
+  height: 38vw;
+  right: 2%;
+  top: 23%;
+  animation-delay: .9s;
+}
+
+.ink-drop-c {
+  width: 44vw;
+  height: 44vw;
+  right: 36%;
+  bottom: 2%;
+  animation-delay: 1.35s;
+}
+
+.ink-drop-d {
+  width: 28vw;
+  height: 28vw;
+  right: 12%;
+  bottom: 18%;
+  animation-delay: 1.8s;
+}
+
+.login-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, oklch(100% 0 0 / 3%) 1px, transparent 1px),
+    linear-gradient(180deg, oklch(100% 0 0 / 2%) 1px, transparent 1px);
+  background-size: 86px 86px;
+  mask-image: linear-gradient(90deg, black, transparent 72%);
+  pointer-events: none;
+}
+
+.castle-gate {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 48%, transparent 0 9rem, oklch(3% 0.02 318 / 42%) 9.2rem 11rem, transparent 11.4rem),
+    linear-gradient(90deg, transparent 48%, oklch(2% 0.02 318 / 28%) 67%, transparent 88%);
+  opacity: 0;
+  transform: scale(.86);
+  transition: opacity .8s ease, transform .8s ease;
+  pointer-events: none;
+}
+
+.accepting-night .castle-gate {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.eye-glow {
+  position: absolute;
+  width: clamp(11px, .9vw, 16px);
+  height: clamp(8px, .62vw, 11px);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 31%, oklch(78% 0.29 22 / 46%) 36% 42%, oklch(60% 0.28 20 / 17%) 60%, transparent 82%),
+    radial-gradient(circle, transparent 0 44%, oklch(50% 0.24 18 / 23%) 68%, transparent 92%);
+  box-shadow:
+    0 0 calc(var(--eye-glow, 8px) * 1.05) oklch(70% 0.28 22 / calc(var(--eye-alpha, 0%) * .5)),
+    0 0 calc(var(--eye-glow, 8px) * 2.7) oklch(47% 0.24 18 / calc(var(--eye-alpha, 0%) * .36));
+  opacity: var(--eye-opacity, 0);
+  mix-blend-mode: screen;
+  transform: scale(var(--eye-scale, 1));
+  transition: opacity .18s ease, box-shadow .18s ease, transform .18s ease;
+  pointer-events: none;
+}
+
+.eye-glow-left {
+  left: var(--eye-left-x);
+  top: var(--eye-left-y);
+  width: clamp(6px, .42vw, 8px);
+  height: clamp(9px, .62vw, 12px);
+  background:
+    radial-gradient(ellipse at center, transparent 0 34%, oklch(78% 0.29 22 / 42%) 38% 43%, oklch(60% 0.28 20 / 18%) 60%, transparent 82%),
+    radial-gradient(ellipse at center, transparent 0 43%, oklch(48% 0.24 18 / 20%) 68%, transparent 92%);
+  box-shadow:
+    0 0 calc(var(--eye-glow, 8px) * 1.45) oklch(70% 0.28 22 / calc(var(--eye-alpha, 0%) * .48)),
+    0 0 calc(var(--eye-glow, 8px) * 3) oklch(47% 0.24 18 / calc(var(--eye-alpha, 0%) * .32));
+  clip-path: polygon(0 0, 66% 0, 36% 100%, 0 100%);
+  mask-image: linear-gradient(135deg, black 0 48%, transparent 74%);
+}
+
+.eye-glow-right {
+  left: var(--eye-right-x);
+  top: var(--eye-right-y);
+}
+
+.debug-eyes-panel {
+  position: fixed;
+  z-index: 80;
+  left: 16px;
+  bottom: 16px;
+  width: min(360px, calc(100vw - 32px));
+  border: 1px solid oklch(76% 0.091 75 / 42%);
+  background: oklch(5% 0.025 318 / 92%);
+  color: var(--ink);
+  padding: 14px;
+  font-size: 12px;
+  box-shadow: 0 10px 26px oklch(0% 0 0 / 34%);
+}
+
+.debug-eyes-panel h2 {
+  margin: 0 0 10px;
+  font: 18px Georgia, "Times New Roman", serif;
+  color: var(--gold);
+}
+
+.debug-eyes-panel label {
+  display: grid;
+  grid-template-columns: 92px 1fr 52px;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: var(--soft);
+  font: 12px "Microsoft YaHei", system-ui, sans-serif;
+}
+
+.debug-eyes-panel input[type="range"] {
+  min-height: 24px;
+  accent-color: #a42b3e;
+}
+
+.debug-eyes-output {
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+  color: oklch(81% 0.045 42);
+  line-height: 1.5;
+  user-select: all;
+}
+
+.debug-eyes .eye-glow {
+  width: 18px;
+  height: 18px;
+  background:
+    linear-gradient(90deg, transparent 8px, oklch(77% 0.26 23) 8px 10px, transparent 10px),
+    linear-gradient(0deg, transparent 8px, oklch(77% 0.26 23) 8px 10px, transparent 10px),
+    radial-gradient(circle, oklch(82% 0.27 24 / 82%) 0 22%, transparent 54%);
+  opacity: 1 !important;
+  box-shadow: 0 0 14px oklch(58% 0.28 22 / 82%);
+  outline: 1px solid oklch(90% 0.02 38 / 72%);
+  transform: translate(-50%, -50%) !important;
+}
+
+.danger-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--danger-x, 62%) var(--danger-y, 22%), oklch(47% 0.24 22 / var(--danger, 0%)), transparent 18rem);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.lilith-hand {
+  position: absolute;
+  right: 33%;
+  top: 53%;
+  width: 98px;
+  height: 46px;
+  border-radius: 60% 30% 45% 55%;
+  background: linear-gradient(100deg, oklch(77% 0.03 28 / 28%), oklch(58% 0.05 15 / 8%));
+  filter: blur(8px);
+  opacity: .3;
+  transform: rotate(-13deg);
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 4;
+  width: min(530px, 100%);
+  animation: revealCopy 1.25s cubic-bezier(.19, 1, .22, 1) both;
+  animation-delay: 4.55s;
+}
+
+.crest {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  font: 24px Georgia, "Times New Roman", serif;
+}
+
+.kicker {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font: 13px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "UnifrakturCook", "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(50px, 8vw, 94px);
+  line-height: .96;
+  color: var(--ink);
+  text-shadow: 0 0 30px oklch(48% 0.13 306 / 22%);
+}
+
+.invitation {
+  max-width: 430px;
+  margin: 22px 0 28px;
+  color: var(--soft);
+  line-height: 1.85;
+  font-size: 15px;
+}
+
+.night-letter {
+  width: min(460px, 100%);
+  position: relative;
+  min-height: 382px;
+  perspective: 1200px;
+  animation: letterArrives 2.8s cubic-bezier(.16, 1, .3, 1) 5.1s both;
+  transform-origin: 76% 30%;
+}
+
+.night-letter::before {
+  content: "";
+  position: absolute;
+  inset: 16% -8% 8%;
+  background:
+    radial-gradient(ellipse at 50% 48%, oklch(48% 0.2 20 / 18%), transparent 58%),
+    radial-gradient(ellipse at 50% 48%, oklch(76% 0.09 75 / 12%), transparent 64%);
+  filter: blur(28px);
+  z-index: -1;
+}
+
+.covenant-aura {
+  position: absolute;
+  inset: -40px -36px;
+  background:
+    radial-gradient(ellipse at 64% 54%, oklch(46% 0.2 20 / 16%), transparent 32%),
+    radial-gradient(ellipse at 38% 40%, oklch(76% 0.09 75 / 10%), transparent 26%),
+    conic-gradient(from 18deg at 58% 54%, transparent 0 13%, oklch(42% 0.18 18 / 18%) 14% 15%, transparent 16% 44%, oklch(76% 0.09 75 / 12%) 45% 46%, transparent 47% 100%);
+  opacity: .82;
+  filter: blur(.6px) drop-shadow(0 0 22px oklch(46% 0.18 18 / 24%));
+  mask-image: radial-gradient(ellipse at center, black 0 46%, transparent 80%);
+  pointer-events: none;
+}
+
+.letter-paper {
+  position: relative;
+  z-index: 3;
+  width: 94%;
+  min-height: 328px;
+  margin: 0 auto;
+  padding: 28px 24px 54px 32px;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 54% 62%, oklch(3% 0.02 318 / 54%), transparent 72%),
+    radial-gradient(circle at 82% 20%, oklch(48% 0.18 18 / 10%), transparent 7rem),
+    radial-gradient(circle at 18% 82%, oklch(76% 0.09 75 / 7%), transparent 8rem),
+    url("../assets/gothic-letter-ornament.svg") center top 10px / 84% auto no-repeat;
+  box-shadow:
+    0 22px 54px oklch(0% 0 0 / 34%);
+  border: 0;
+  backdrop-filter: none;
+  transform: translateY(12px) rotate(-.8deg);
+  animation: paperPeeks 1.7s cubic-bezier(.19, 1, .22, 1) 5.45s both;
+}
+
+.letter-paper::before {
+  content: "";
+  position: absolute;
+  inset: 18px 22px 26px 16px;
+  border: 0;
+  background:
+    radial-gradient(ellipse at 57% 49%, transparent 0 38%, oklch(76% 0.09 75 / 18%) 39% 39.6%, transparent 41%),
+    conic-gradient(from 34deg at 57% 49%, transparent 0 9%, oklch(76% 0.09 75 / 14%) 10% 10.6%, transparent 11% 34%, oklch(46% 0.2 20 / 18%) 35% 35.8%, transparent 36% 100%),
+    linear-gradient(115deg, transparent 0 18%, oklch(76% 0.09 75 / 10%) 18.4% 18.8%, transparent 19.2% 100%);
+  opacity: .78;
+  pointer-events: none;
+}
+
+.letter-paper::after {
+  content: "";
+  position: absolute;
+  inset: auto 22px 18px auto;
+  width: 142px;
+  height: 142px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 38%, oklch(76% 0.09 75 / 12%) 39% 40%, transparent 42%),
+    radial-gradient(circle at 50% 50%, oklch(46% 0.2 20 / 18%), transparent 58%);
+  opacity: .44;
+  filter: blur(1px) drop-shadow(0 0 22px oklch(47% 0.2 20 / 28%));
+}
+
+.letter-ornament {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 82%;
+  height: 76px;
+  translate: -50% 0;
+  opacity: .32;
+  background: url("../assets/gothic-letter-ornament.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.letter-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  color: oklch(76% 0.09 75 / 78%);
+  font: 12px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  max-width: 92%;
+}
+
+.letter-copy {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 22px;
+  max-width: 86%;
+  color: oklch(81% 0.035 37 / 86%);
+  line-height: 1.72;
+  font: 16px "IM Fell English", Georgia, "Times New Roman", serif;
+  text-shadow: 0 0 10px oklch(0% 0 0 / 48%);
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 15px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.form-row {
+  display: grid;
+  gap: 7px;
+  width: min(360px, 100%);
+}
+
+.form-row:nth-of-type(2) {
+  margin-left: clamp(18px, 5vw, 54px);
+  width: min(330px, calc(100% - 34px));
+}
+
+label {
+  color: oklch(76% 0.09 75 / 82%);
+  font: 13px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+}
+
+input {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-bottom: 1px solid oklch(76% 0.09 75 / 34%);
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, oklch(44% 0.17 18 / 12%), transparent 74%);
+  color: oklch(91% 0.03 37);
+  padding: 0 4px;
+  outline: none;
+}
+
+input::placeholder {
+  color: oklch(64% 0.045 25 / 72%);
+  font-style: italic;
+}
+
+input:focus {
+  border-color: oklch(55% 0.22 22 / 88%);
+  box-shadow: 0 8px 24px -18px oklch(55% 0.22 22 / 92%);
+}
+
+.enter-button {
+  min-height: 44px;
+  padding: 0 18px;
+  width: min(310px, 82%);
+  margin: 4px 0 0 clamp(34px, 8vw, 82px);
+  border: 1px solid oklch(76% 0.09 75 / 28%);
+  background:
+    radial-gradient(circle at 50% 50%, oklch(47% 0.2 20 / 24%), transparent 58%),
+    linear-gradient(90deg, transparent, oklch(76% 0.09 75 / 12%), transparent),
+    oklch(6% 0.025 318 / 58%);
+  color: oklch(84% 0.075 68);
+  font: 14px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  letter-spacing: .02em;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 12px oklch(50% 0.2 20 / 34%);
+}
+
+.enter-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  translate: -110% 0;
+  background: linear-gradient(90deg, transparent, oklch(95% 0.03 50 / 26%), transparent);
+  transition: translate .55s ease;
+}
+
+.enter-button span {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding-top: 1px;
+}
+
+.enter-button:hover::after {
+  translate: 110% 0;
+}
+
+.form-message {
+  margin: 0;
+  min-height: 20px;
+  max-width: 320px;
+  margin-left: 6px;
+  color: oklch(69% 0.04 30 / 86%);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.form-message.is-error {
+  color: oklch(67% 0.23 25);
+}
+
+.form-message.is-success {
+  color: oklch(78% 0.09 75);
+}
+
+.lilith-sigil {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: oklch(84% 0.06 58 / 58%);
+  font: 50px "UnifrakturCook", "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 35%, oklch(76% 0.09 75 / 22%) 36% 37%, transparent 38%),
+    radial-gradient(circle at 50% 50%, transparent 0 51%, oklch(43% 0.2 20 / 28%) 52% 53%, transparent 55%),
+    conic-gradient(from 18deg, transparent 0 10%, oklch(76% 0.09 75 / 22%) 11% 11.8%, transparent 12.4% 26%, oklch(44% 0.2 20 / 22%) 27% 28%, transparent 29% 100%);
+  box-shadow:
+    0 0 28px oklch(47% 0.2 20 / 20%),
+    inset 0 0 28px oklch(76% 0.09 75 / 8%);
+  opacity: .68;
+  transform: rotate(-11deg);
+  mix-blend-mode: screen;
+}
+
+.lilith-sigil::before,
+.lilith-sigil::after {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border-radius: 50%;
+  border: 1px solid oklch(76% 0.09 75 / 20%);
+}
+
+.lilith-sigil::before {
+  clip-path: polygon(50% 0, 64% 36%, 100% 50%, 64% 64%, 50% 100%, 36% 64%, 0 50%, 36% 36%);
+}
+
+.lilith-sigil::after {
+  inset: 44px;
+  border-color: oklch(46% 0.2 20 / 24%);
+  filter: blur(.2px);
+}
+
+.sigil-letter {
+  position: relative;
+  z-index: 1;
+  text-shadow:
+    0 0 14px oklch(76% 0.09 75 / 28%),
+    0 0 30px oklch(46% 0.2 20 / 32%);
+}
+
+.accepting-night .lilith-sigil {
+  animation: sigilSeal .92s cubic-bezier(.2, .9, .25, 1.2) forwards;
+}
+
+.accepting-night .night-letter {
+  animation: letterReturns 2.4s cubic-bezier(.64, 0, .78, 0) .68s forwards;
+}
+
+.accepting-night .letter-paper {
+  animation: paperReturns 1.25s cubic-bezier(.64, 0, .78, 0) .68s forwards;
+}
+
+.ritual-strip {
+  position: absolute;
+  z-index: 4;
+  left: clamp(24px, 6vw, 96px);
+  right: clamp(24px, 6vw, 96px);
+  bottom: 26px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  color: oklch(74% 0.03 25 / 74%);
+  font: 12px Georgia, "Times New Roman", serif;
+}
+
+.ritual-strip span {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.inside,
+.admin-vault {
+  min-height: 100vh;
+  padding: 54px clamp(22px, 5vw, 74px);
+  background:
+    linear-gradient(180deg, oklch(4% 0.02 318 / 90%), oklch(5% 0.025 318)),
+    url("../assets/lilith-wide-hero.png") var(--lilith-bg-position) / var(--lilith-bg-size) fixed;
+}
+
+.inside-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+.inside h2,
+.admin-vault h2 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 64px);
+}
+
+.ghost-button {
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+.inside-grid,
+.vault-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.vault-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+.archive-panel {
+  min-height: 236px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 22px;
+  backdrop-filter: blur(8px);
+}
+
+.archive-panel h3 {
+  margin: 0 0 14px;
+  font-size: 27px;
+}
+
+.archive-panel p {
+  margin: 0;
+  color: var(--soft);
+  line-height: 1.8;
+}
+
+.image-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.image-panel img {
+  width: 100%;
+  height: 100%;
+  min-height: 236px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.hidden-vault {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(45% 0.2 18 / 58%), transparent 72%);
+  opacity: .28;
+}
+
+.hidden-vault:focus-visible,
+.hidden-vault:hover {
+  opacity: .9;
+  outline: 1px solid var(--gold);
+}
+
+.account-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.account-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  color: var(--soft);
+}
+
+@keyframes revealCopy {
+  from { opacity: 0; transform: translateY(18px); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes curtainLift {
+  0% { opacity: 1; }
+  54% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes nameAppears {
+  0% { opacity: 0; filter: blur(12px); transform: translateY(10px); }
+  38% { opacity: .12; }
+  68% { opacity: .82; filter: blur(1px); transform: translateY(0); }
+  100% { opacity: 0; filter: blur(12px); transform: translateY(-8px); }
+}
+
+@keyframes crestAppears {
+  0% { opacity: 0; filter: blur(14px); transform: scale(.92); }
+  45% { opacity: .78; filter: blur(1px); transform: scale(1); }
+  82% { opacity: .72; }
+  100% { opacity: 0; filter: blur(12px); transform: scale(1.03); }
+}
+
+@keyframes subtitleAppears {
+  0%, 18% { opacity: 0; transform: translateY(6px); }
+  48%, 76% { opacity: .7; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-5px); }
+}
+
+@keyframes inkVeil {
+  0%, 18% { opacity: 1; }
+  72% { opacity: .58; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes inkBloom {
+  0% { transform: scale(.05); opacity: 0; }
+  20% { opacity: .82; }
+  74% { transform: scale(1.85); opacity: .9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes letterArrives {
+  0% {
+    opacity: 0;
+    transform: translate(12vw, -5vh) rotate(-4deg) scale(.82);
+    filter: blur(18px);
+  }
+  58% {
+    opacity: .86;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes paperPeeks {
+  from { opacity: 0; transform: translateY(22px) rotate(-.8deg) scale(.96); filter: blur(12px); }
+  to { opacity: 1; transform: translateY(12px) rotate(-.8deg) scale(1); filter: blur(0); }
+}
+
+@keyframes sigilSeal {
+  0% { opacity: .68; transform: rotate(-11deg) scale(1); filter: saturate(1); }
+  54% { opacity: 1; transform: rotate(-11deg) scale(1.18); filter: saturate(1.7) brightness(1.25); }
+  100% { opacity: .92; transform: rotate(-11deg) scale(.92); filter: saturate(1.35); }
+}
+
+@keyframes paperReturns {
+  from { opacity: 1; transform: translateY(12px) rotate(-.8deg) scale(1); filter: blur(0); }
+  to { opacity: 0; transform: translateY(-8px) rotate(-.8deg) scale(.82); filter: blur(14px); }
+}
+
+@keyframes letterReturns {
+  0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+  62% { opacity: 1; }
+  100% {
+    transform: translate(14vw, -6vh) rotate(5deg) scale(.32);
+    opacity: 0;
+    filter: blur(16px);
+  }
+}
+
+@keyframes castleApproach {
+  0% { background-size: auto, auto, 100%; }
+  100% { background-size: auto, auto, 138%; }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --rail: 0px;
+  }
+
+  .page-shell {
+    display: block;
+  }
+
+  .side-rail {
+    position: fixed;
+    inset: 0 0 auto;
+    width: auto;
+    min-height: 68px;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 14px;
+  }
+
+  .brand-mark {
+    grid-template-columns: auto auto;
+    text-align: left;
+  }
+
+  .rail-nav {
+    display: flex;
+    gap: 13px;
+    overflow-x: auto;
+    max-width: 46vw;
+  }
+
+  .music-toggle {
+    min-height: 38px;
+  }
+
+  main {
+    grid-column: auto;
+  }
+
+  .login-stage {
+    padding-top: 104px;
+    align-items: end;
+    --lilith-bg-size: cover;
+    --lilith-bg-position: 62% center;
+  }
+
+  .login-card {
+    width: 100%;
+  }
+
+  .night-letter {
+    width: min(390px, 100%);
+  }
+
+  .ritual-strip {
+    position: static;
+    margin-top: 26px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .inside,
+  .admin-vault {
+    padding-top: 104px;
+  }
+
+  .inside-grid,
+  .vault-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .side-rail {
+    gap: 12px;
+  }
+
+  .rail-nav {
+    display: none;
+  }
+
+  .login-stage {
+    min-height: 100svh;
+    padding-inline: 16px;
+    --lilith-bg-size: cover;
+    --lilith-bg-position: 67% center;
+  }
+
+  h1 {
+    font-size: clamp(44px, 17vw, 66px);
+  }
+
+  .letter-head {
+    display: grid;
+    gap: 4px;
+  }
+
+  .inside-header {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+
+  #embers,
+  .cursor-aura {
+    display: none;
+  }
+}

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" role="img" aria-label="Lilith's Night title ornament">
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1">
+      <stop offset="0" stop-color="#7c6244"/>
+      <stop offset=".5" stop-color="#e5c68b"/>
+      <stop offset="1" stop-color="#7c6244"/>
+    </linearGradient>
+    <radialGradient id="ruby" cx=".45" cy=".35" r=".65">
+      <stop offset="0" stop-color="#e66b78"/>
+      <stop offset=".46" stop-color="#7b1b34"/>
+      <stop offset="1" stop-color="#1b0710"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="1.4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g fill="none" stroke="url(#gold)" stroke-width="2" opacity=".84" filter="url(#soft)">
+    <path d="M80 110 H328"/>
+    <path d="M572 110 H820"/>
+    <path d="M310 110 C342 82 374 74 410 94"/>
+    <path d="M590 110 C558 82 526 74 490 94"/>
+    <path d="M450 36 C420 67 419 112 450 184 C481 112 480 67 450 36Z"/>
+    <path d="M413 114 C432 98 468 98 487 114"/>
+    <path d="M102 110 l28 -18 l-10 18 l10 18Z"/>
+    <path d="M798 110 l-28 -18 l10 18 l-10 18Z"/>
+  </g>
+  <g>
+    <circle cx="450" cy="110" r="30" fill="url(#ruby)"/>
+    <path d="M450 84 C431 102 434 126 452 147 C470 127 474 103 450 84Z" fill="#a2273f"/>
+    <path d="M420 112 C440 104 453 118 460 143 C432 141 418 130 420 112Z" fill="#3b0d19"/>
+    <path d="M480 112 C460 104 447 118 440 143 C468 141 482 130 480 112Z" fill="#5d1427"/>
+  </g>
+</svg>

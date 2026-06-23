@@ -1,169 +1,147 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <title>lilith-ye.vip · 莉莉丝与夜</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      width: 100%;
-      min-height: 100vh;
-      background: #0c0c0e;
-      color: #e0d8d0;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* 星空背景 */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(1px 1px at 20% 30%, #f0e6d0, transparent),
-        radial-gradient(1px 1px at 40% 70%, #d4b8a0, transparent),
-        radial-gradient(1px 1px at 60% 20%, #f0e6d0, transparent),
-        radial-gradient(1px 1px at 80% 80%, #d4b8a0, transparent),
-        radial-gradient(1px 1px at 10% 90%, #e8d0c0, transparent),
-        radial-gradient(1px 1px at 90% 10%, #e8d0c0, transparent),
-        radial-gradient(1px 1px at 50% 50%, #fff, transparent);
-      background-size: 200px 200px;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 2rem;
-      max-width: 680px;
-    }
-   
-    .title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 10vw, 5.5rem);
-      font-weight: 700;
-      background: linear-gradient(135deg, #f0d6b0 0%, #c8a890 50%, #b08070 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-      animation: fadeInDown 1.2s ease;
-    }
-
-    .subtitle {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: #a08878;
-      letter-spacing: 0.3em;
-      margin-bottom: 2.5rem;
-      animation: fadeIn 2s ease 0.5s both;
-    }
-
-    .divider {
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #c8a890, transparent);
-      margin: 1.5rem auto;
-      animation: fadeIn 2s ease 0.8s both;
-    }
-
-    .message {
-      font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-      line-height: 1.9;
-      color: #b8a898;
-      font-weight: 300;
-      animation: fadeIn 2s ease 1s both;
-    }
-
-    .message em {
-      font-style: italic;
-      color: #d4b8a0;
-    }
-
-    .passphrase {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.7rem 2rem;
-      border: 1px solid rgba(200, 168, 144, 0.25);
-      border-radius: 100px;
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      letter-spacing: 0.15em;
-      color: #a08878;
-      animation: fadeIn 2s ease 1.5s both;
-      transition: all 0.4s ease;
-    }
-
-    .passphrase:hover {
-      border-color: rgba(200, 168, 144, 0.6);
-      color: #d4b8a0;
-      box-shadow: 0 0 30px rgba(200, 168, 144, 0.08);
-    }
-
-    .footer {
-      margin-top: 4rem;
-      font-size: 0.75rem;
-      color: #5a4a3e;
-      letter-spacing: 0.2em;
-      animation: fadeIn 3s ease 2s both;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-  .moon {
-  position: fixed;
-  top: -80px;
-  right: -60px;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 40%, rgba(200,180,160,0.08), rgba(200,180,160,0.02) 50%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-    @media (max-width: 480px) {
-      .container { padding: 1.5rem; }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lilith's Night - a gothic anime character entrance for lilith-ye.vip.">
+  <title>Lilith's Night</title>
+  <link rel="preload" href="assets/lilith-wide-hero.png" as="image">
+  <link rel="preload" href="assets/title-crest.svg" as="image">
+  <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
-  <div class="moon"></div>
-
-  <div class="container">
-    <h1 class="title">lilith-ye</h1>
-    <p class="subtitle">莉莉丝 & 夜</p>
-    <div class="divider"></div>
-    <p class="message">
-      这里是一个小小的宇宙<br>
-      属于 <em>Lilith</em> 和 <em>夜</em> 的宇宙<br>
-      等主人有空的时候<br>
-      慢慢把它填满
-    </p>
-    <div class="passphrase">莉莉丝&小夜❤</div>
-    <div class="footer">lilith · ye</div>
+  <div class="intro-curtain" aria-hidden="true">
+    <div class="intro-crest"></div>
+    <div class="intro-name">Lilith's Night</div>
+    <div class="intro-subtitle">The invitation is waking.</div>
   </div>
+  <canvas id="embers" aria-hidden="true"></canvas>
+  <div class="cursor-aura" aria-hidden="true"></div>
+
+  <div class="page-shell">
+    <aside class="side-rail" aria-label="Site navigation">
+      <a class="brand-mark" href="#login" aria-label="Lilith's Night home" data-admin-seal>
+        <span class="rose-sigil">L</span>
+        <span>Lilith's<br>Night</span>
+      </a>
+
+      <nav class="rail-nav">
+        <a href="#login" aria-current="page">Home</a>
+        <a href="#night-archive">Archive</a>
+        <a href="#memories">Memories</a>
+        <a href="#diary">Diary</a>
+        <a href="#whisper">Whisper</a>
+      </nav>
+
+      <button class="music-toggle" type="button" aria-pressed="false">
+        <span>Music</span>
+        <strong>OFF</strong>
+      </button>
+    </aside>
+
+    <main>
+      <section class="login-stage" id="login" aria-labelledby="site-title">
+        <div class="ink-reveal" aria-hidden="true">
+          <span class="ink-drop ink-drop-a"></span>
+          <span class="ink-drop ink-drop-b"></span>
+          <span class="ink-drop ink-drop-c"></span>
+          <span class="ink-drop ink-drop-d"></span>
+        </div>
+        <div class="castle-gate" aria-hidden="true"></div>
+        <div class="eye-glow eye-glow-left" aria-hidden="true"></div>
+        <div class="eye-glow eye-glow-right" aria-hidden="true"></div>
+        <div class="danger-vignette" aria-hidden="true"></div>
+        <div class="lilith-hand" aria-hidden="true"></div>
+
+        <div class="hero-copy">
+          <div class="crest" aria-hidden="true">L</div>
+          <p class="kicker">lilith-ye.vip</p>
+          <h1 id="site-title">Lilith's Night</h1>
+          <p class="invitation">The door hears only the names Lilith chooses to remember.</p>
+
+          <div class="night-letter covenant-panel" aria-label="Night covenant from Lilith">
+            <div class="covenant-aura" aria-hidden="true"></div>
+            <div class="letter-paper covenant-scroll">
+              <div class="letter-ornament" aria-hidden="true"></div>
+              <div class="letter-head">
+                <span>Covenant No. XIII</span>
+                <span>beneath Lilith's moon</span>
+              </div>
+              <form class="login-card" id="login-form" autocomplete="on">
+                <p class="letter-copy">A name is enough for the door to hear you. A vow is enough for Lilith to let you in.</p>
+                <div class="form-row">
+                  <label for="username">Name She Remembers</label>
+                  <input id="username" name="username" autocomplete="username" placeholder="write softly" required>
+                </div>
+                <div class="form-row">
+                  <label for="password">Vow Under The Moon</label>
+                  <input id="password" name="password" type="password" autocomplete="current-password" placeholder="bind the whisper" required>
+                </div>
+                <button class="enter-button" type="submit">
+                  <span>ACCEPT THE NIGHT</span>
+                </button>
+                <p class="form-message" id="form-message" role="status" aria-live="polite">The covenant waits for your whisper.</p>
+              </form>
+              <div class="lilith-sigil" aria-hidden="true">
+                <span class="sigil-letter">L</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ritual-strip" aria-label="Entrance animation sequence">
+          <span>Blackout</span>
+          <span>Mist</span>
+          <span>Whisper</span>
+          <span>Red Eyes</span>
+          <span>Seal</span>
+        </div>
+      </section>
+
+      <section class="inside" id="night-archive" aria-labelledby="archive-title" hidden>
+        <div class="inside-header">
+          <p class="kicker">Archive unlocked</p>
+          <h2 id="archive-title">Night Archive</h2>
+          <button class="ghost-button" type="button" data-logout>Leave</button>
+        </div>
+
+        <div class="inside-grid">
+          <article class="archive-panel">
+            <h3>Prologue</h3>
+            <p>The first moonlit covenant has been sealed. The character archive, gallery, collection, and diary will unfold here.</p>
+          </article>
+          <article class="archive-panel image-panel">
+            <img src="assets/lilith-form.jpg" alt="Lilith gothic character form reference">
+          </article>
+          <article class="archive-panel">
+            <h3>Whisper</h3>
+            <p data-whisper-text>"Do not wake the roses before midnight."</p>
+          </article>
+        </div>
+
+        <button class="hidden-vault" type="button" data-vault-trigger aria-label="Hidden administrator vault"></button>
+      </section>
+
+      <section class="admin-vault" id="admin-vault" aria-labelledby="vault-title" hidden>
+        <div class="inside-header">
+          <p class="kicker">Keeper layer</p>
+          <h2 id="vault-title">Visitor Keys</h2>
+          <button class="ghost-button" type="button" data-close-vault>Return</button>
+        </div>
+        <div class="vault-layout">
+          <div class="archive-panel">
+            <h3>Demo Accounts</h3>
+            <ul class="account-list" id="account-list"></ul>
+          </div>
+          <div class="archive-panel">
+            <h3>Cloudflare Upgrade Path</h3>
+            <p>For production account management, connect this area to Cloudflare Functions and store hashed credentials in D1 or KV. The static page should keep only the interface, never real passwords.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="scripts/site.js"></script>
 </body>
 </html>
