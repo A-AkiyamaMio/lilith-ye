@@ -1,4 +1,4 @@
-import { authenticate, demoAccounts, getLandingPath } from "./auth-model.js";
+import { authenticate, demoAccounts, getLandingPath, registerUser, loadRegisteredUsers } from "./auth-model.js";
 
 const root = document.documentElement;
 const form = document.querySelector("#login-form");
@@ -18,6 +18,7 @@ const whispers = [
 
 let activeUser = null;
 let sealTaps = 0;
+let showingRegister = false;
 
 function setupEyeDebugger() {
   const params = new URLSearchParams(window.location.search);
@@ -81,13 +82,18 @@ function showInside(user) {
   vault.hidden = getLandingPath(user) !== "#admin-vault";
   if (!vault.hidden) renderAccounts();
   document.querySelector("[data-whisper-text]").textContent =
-    `“${whispers[Math.floor(Math.random() * whispers.length)]}”`;
+    `\u201c${whispers[Math.floor(Math.random() * whispers.length)]}\u201d`;
   location.hash = getLandingPath(user);
 }
 
 function renderAccounts() {
+  const registered = loadRegisteredUsers();
+  const all = [
+    ...demoAccounts,
+    ...registered.map((u) => ({ displayName: u.displayName, role: "registered" }))
+  ];
   accountList.replaceChildren(
-    ...demoAccounts.map((account) => {
+    ...all.map((account) => {
       const item = document.createElement("li");
       const name = document.createElement("span");
       const role = document.createElement("strong");
@@ -99,9 +105,71 @@ function renderAccounts() {
   );
 }
 
+// ── Registration toggle ──
+function setupRegisterToggle() {
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "register-toggle";
+  toggle.textContent = "\u2727 Sign a new covenant \u2727";
+  toggle.setAttribute("aria-label", "Switch to registration form");
+  form.querySelector(".form-row:last-child")?.after(toggle);
+
+  const displayNameRow = document.createElement("div");
+  displayNameRow.className = "form-row register-only";
+  displayNameRow.hidden = true;
+  const label = document.createElement("label");
+  label.setAttribute("for", "display-name");
+  label.textContent = "Name She Shall Call You";
+  const input = document.createElement("input");
+  input.id = "display-name";
+  input.name = "displayName";
+  input.autocomplete = "off";
+  input.placeholder = "how the night remembers you";
+  displayNameRow.append(label, input);
+  toggle.after(displayNameRow);
+
+  toggle.addEventListener("click", () => {
+    showingRegister = !showingRegister;
+    displayNameRow.hidden = !showingRegister;
+    toggle.textContent = showingRegister
+      ? "\u2727 Return to the covenant \u2727"
+      : "\u2727 Sign a new covenant \u2727";
+    const btn = form.querySelector(".enter-button span");
+    btn.textContent = showingRegister ? "SIGN THE COVENANT" : "ACCEPT THE NIGHT";
+    setMessage(
+      showingRegister
+        ? "A new name, a new vow beneath the moon."
+        : "The covenant waits for your whisper.",
+      "success"
+    );
+  });
+}
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const data = new FormData(form);
+
+  if (showingRegister) {
+    const username = data.get("username");
+    const password = data.get("password");
+    const displayName = data.get("displayName") || username;
+    const result = registerUser(username, password, displayName);
+
+    if (!result.ok) {
+      setMessage(result.reason || "The gate rejects this key.", "error");
+      form.animate(
+        [{ transform: "translateX(0)" }, { transform: "translateX(-8px)" }, { transform: "translateX(8px)" }, { transform: "translateX(0)" }],
+        { duration: 220, easing: "ease-out" }
+      );
+      return;
+    }
+
+    setMessage("The covenant is sealed. Welcome, " + result.user.displayName + ".", "success");
+    login.classList.add("accepting-night");
+    setTimeout(() => showInside(result.user), 2650);
+    return;
+  }
+
   const result = authenticate(demoAccounts, data.get("username"), data.get("password"));
 
   if (!result.ok) {
@@ -148,8 +216,8 @@ document.querySelector("[data-admin-seal]").addEventListener("click", (event) =>
   event.preventDefault();
   sealTaps += 1;
   if (sealTaps >= 3) {
-    document.querySelector("#username").value = "admin";
-    setMessage("Keeper name remembered. The final vow is still yours to know.", "success");
+    document.querySelector("#username").value = "lilith";
+    setMessage("Keeper name remembered. Speak your vow.", "success");
     sealTaps = 0;
   }
 });
@@ -234,4 +302,5 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   startEmbers();
 }
 
+setupRegisterToggle();
 setupEyeDebugger();
