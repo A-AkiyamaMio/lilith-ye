@@ -1,3 +1,5 @@
+/usr/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh-CN.UTF-8): No such file or directory
+/usr/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh-CN.UTF-8): No such file or directory
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -106,9 +108,10 @@
         </div>
 
         <div class="inside-grid">
-          <article class="archive-panel">
+          <article class="archive-panel match-panel">
             <h3>Prologue</h3>
             <p>The first moonlit covenant has been sealed. The character archive, gallery, collection, and diary will unfold here.</p>
+            <button class="match-button" type="button" data-match-trigger aria-label="Enter match">⚔ Match</button>
           </article>
           <article class="archive-panel image-panel">
             <img src="assets/lilith-form.jpg" alt="Lilith gothic character form reference">
@@ -137,6 +140,19 @@
             <h3>Cloudflare Upgrade Path</h3>
             <p>For production account management, connect this area to Cloudflare Functions and store hashed credentials in D1 or KV. The static page should keep only the interface, never real passwords.</p>
           </div>
+        </div>
+      </section>
+
+      <section class="inside match-page" id="match-page" aria-labelledby="match-title" hidden>
+        <div class="inside-header">
+          <p class="kicker">⚔ Match</p>
+          <h2 id="match-title">The Arena</h2>
+          <button class="ghost-button" type="button" data-close-match>Return</button>
+        </div>
+        <div class="match-content">
+          <div class="maintenance-sigil" aria-hidden="true">🛠</div>
+          <p class="maintenance-text">系统维护中....</p>
+          <p class="maintenance-sub">The arena is being forged. Come back when the embers glow again.</p>
         </div>
       </section>
     </main>

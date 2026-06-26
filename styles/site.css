@@ -1,3 +1,4 @@
+/usr/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh-CN.UTF-8): No such file or directory
 @import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=UnifrakturCook:wght@700&family=IM+Fell+English:ital@0;1&display=swap");
 
 :root {
@@ -1075,4 +1076,68 @@ input:focus {
   .cursor-aura {
     display: none;
   }
+}
+
+/* ── Match button (small, bottom-left of Prologue panel) ── */
+.match-panel {
+  position: relative;
+  padding-bottom: 52px;
+}
+
+.match-button {
+  position: absolute;
+  left: 22px;
+  bottom: 14px;
+  font: 12px "Cinzel Decorative", Georgia, "Times New Roman", serif;
+  color: oklch(76% 0.091 75 / 78%);
+  background: transparent;
+  border: 1px solid oklch(76% 0.091 75 / 24%);
+  padding: 4px 12px 3px;
+  min-height: auto;
+  letter-spacing: .04em;
+  transition: color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.match-button:hover,
+.match-button:focus-visible {
+  color: oklch(86% 0.09 75);
+  border-color: oklch(76% 0.091 75 / 56%);
+  box-shadow: 0 0 12px oklch(76% 0.091 75 / 18%);
+}
+
+/* ── Match page (arena) ── */
+.match-page .match-content {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: calc(100vh - 240px);
+  gap: 16px;
+  text-align: center;
+}
+
+.maintenance-sigil {
+  font-size: 48px;
+  opacity: .62;
+  filter: grayscale(.3);
+  animation: sigilPulse 3s ease-in-out infinite;
+}
+
+.maintenance-text {
+  font: clamp(28px, 5vw, 44px) "UnifrakturCook", "Cinzel Decorative", Georgia, serif;
+  color: var(--gold);
+  letter-spacing: .08em;
+  text-shadow: 0 0 20px oklch(76% 0.091 75 / 16%);
+}
+
+.maintenance-sub {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+@keyframes sigilPulse {
+  0%, 100% { opacity: .62; transform: scale(1); }
+  50% { opacity: .86; transform: scale(1.08); }
 }

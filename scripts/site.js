@@ -302,5 +302,27 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   startEmbers();
 }
 
+// ── Match page navigation ──
+const matchPage = document.querySelector("#match-page");
+const matchTrigger = document.querySelector("[data-match-trigger]");
+const closeMatch = document.querySelector("[data-close-match]");
+
+if (matchTrigger) {
+  matchTrigger.addEventListener("click", () => {
+    inside.hidden = true;
+    vault.hidden = true;
+    matchPage.hidden = false;
+    location.hash = "#match-page";
+  });
+}
+
+if (closeMatch) {
+  closeMatch.addEventListener("click", () => {
+    matchPage.hidden = true;
+    inside.hidden = false;
+    location.hash = "#night-archive";
+  });
+}
+
 setupRegisterToggle();
 setupEyeDebugger();
