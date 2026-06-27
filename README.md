@@ -1,35 +1,31 @@
 # Lilith's Night
 
-Static first-screen site for `lilith-ye.vip`, ready to deploy through GitHub -> Cloudflare Pages.
+`lilith-ye.vip` 的私人角色收藏馆。当前重构版本包含新的登录/申请入口、Cloudflare Pages Functions 身份接口，以及 D1 审批数据结构。
 
-## Deploy
-
-1. Commit this folder to the GitHub repository used by Cloudflare Pages.
-2. In Cloudflare Pages, set the build command to empty or `npm test`.
-3. Set the output directory to `/` if this folder is the repository root, or to `outputs/lilith-ye-site` if deploying from this workspace structure.
-
-## Demo Login
-
-- Visitor: `visitor` / `lilith`
-- Admin demo: `admin` / `moonrose`
-
-These credentials are only for the static prototype. Real visitor account management should be implemented with Cloudflare Functions plus D1 or KV, with hashed passwords and server-side sessions. Do not place production credentials in client-side JavaScript.
-
-## Optional Image Generation
-
-Set API credentials locally before running asset generation. Do not commit real keys.
-
-PowerShell:
+## 本地预览
 
 ```powershell
-$env:OPENAI_BASE_URL="https://api-cn.hi-code.cc"
-$env:OPENAI_API_KEY="your-api-key"
-$env:OPENAI_IMAGE_MODEL="gpt-image-2"
-npm run generate:asset -- "Antique gothic envelope, rose and thorns, red wax seal, no text"
+npm start
 ```
 
-The generated file is written to `assets/generated-asset.png`.
+静态预览位于 `http://127.0.0.1:4173`。本地静态服务器不模拟身份接口；注册、登录与会话需要在 Cloudflare Pages 环境中验证。
 
-## Hidden Admin Layer
+## Cloudflare 配置
 
-After logging in as admin, use the small red point at the lower-right corner to reveal the visitor key demo panel. The logo also has a hidden helper gesture: Shift-click the Lilith mark three times to prefill the admin username.
+1. 创建 D1 数据库，并在 Pages 项目中绑定为 `DB`。
+2. 对数据库执行 `migrations/0001_identity.sql`。
+3. 临时设置加密环境变量 `ADMIN_BOOTSTRAP_TOKEN`。
+4. 使用该令牌调用一次 `/api/admin/bootstrap` 创建首位管理员。
+5. 创建成功后立即删除 `ADMIN_BOOTSTRAP_TOKEN`。
+
+生产环境中不存在前端演示账号、明文密码或 `localStorage` 用户数据库。密码通过 PBKDF2-SHA256 摘要保存，会话令牌只以 SHA-256 摘要存入 D1，并通过 `HttpOnly`、`Secure`、`SameSite=Strict` Cookie 传递。
+
+## 测试
+
+```powershell
+npm test
+```
+
+## 部署
+
+Cloudflare Pages 的构建命令可设为 `npm test`，输出目录设为仓库根目录。不要使用会把命令行标准错误重定向进 HTML/CSS/JS 的生成脚本。

@@ -1,23 +1,24 @@
 import assert from "node:assert/strict";
-import { authenticate, demoAccounts, getLandingPath, normalizeUsername } from "../scripts/auth-model.js";
+import { normalizeUsername, validateAccessInput } from "../scripts/auth-model.js";
+import { hashPassword, verifyPassword } from "../functions/_lib/security.js";
 
-assert.equal(normalizeUsername("  Admin "), "admin");
+assert.equal(normalizeUsername("  Night.Guest "), "night.guest");
 
-assert.deepEqual(authenticate(demoAccounts, "VISITOR", "lilith"), {
-  ok: true,
-  user: {
-    username: "visitor",
-    role: "visitor",
-    displayName: "Night Visitor"
-  }
-});
+assert.equal(validateAccessInput("apply", {
+  username: "guest_13",
+  password: "a-long-private-vow",
+  displayName: "Night Guest",
+  note: "For the archive"
+}).ok, true);
 
-assert.deepEqual(authenticate(demoAccounts, "visitor", "wrong"), {
-  ok: false,
-  reason: "invalid_credentials"
-});
+const invalid = validateAccessInput("apply", { username: "x", password: "short" });
+assert.equal(invalid.ok, false);
+assert.ok(invalid.errors.username);
+assert.ok(invalid.errors.password);
 
-assert.equal(getLandingPath({ role: "admin" }), "#admin-vault");
-assert.equal(getLandingPath({ role: "visitor" }), "#night-archive");
+const encoded = await hashPassword("moonlit-covenant");
+assert.match(encoded, /^pbkdf2_sha256\$210000\$/);
+assert.equal(await verifyPassword("moonlit-covenant", encoded), true);
+assert.equal(await verifyPassword("wrong-vow", encoded), false);
 
-console.log("auth-model tests passed");
+console.log("auth model tests passed");

@@ -1,97 +1,63 @@
-// ── Super Admin ─────────────────────────────────────────────
-const ADMIN = Object.freeze({
-  username: "lilith",
-  password: "Lilith_4ever",
-  role: "admin",
-  displayName: "Lilith Keeper"
-});
-
-// ── Demo visitors ───────────────────────────────────────────
-export const demoAccounts = Object.freeze([
-  { username: "visitor", password: "lilith", role: "visitor", displayName: "Night Visitor" }
-]);
-
 export function normalizeUsername(value) {
-  return String(value || "").trim().toLowerCase();
+  return String(value ?? "").trim().toLowerCase();
 }
 
-export function authenticate(accounts, username, password) {
-  const normalized = normalizeUsername(username);
-  const pw = String(password || "");
+export function validateAccessInput(mode, values) {
+  const username = normalizeUsername(values.username);
+  const password = String(values.password ?? "");
+  const errors = {};
 
-  // Check super admin first
-  if (normalizeUsername(ADMIN.username) === normalized && ADMIN.password === pw) {
-    return {
-      ok: true,
-      user: { username: ADMIN.username, role: ADMIN.role, displayName: ADMIN.displayName }
-    };
+  if (!/^[a-z0-9_.-]{3,32}$/.test(username)) {
+    errors.username = "名字需要 3–32 位，只能使用字母、数字、下划线、点与连字符。";
   }
 
-  // Check demo accounts
-  const account = accounts.find((item) => normalizeUsername(item.username) === normalized);
-  if (account && account.password === pw) {
-    return {
-      ok: true,
-      user: { username: account.username, role: account.role, displayName: account.displayName }
-    };
+  if (mode === "apply" && password.length < 10) {
+    errors.password = "月下誓言至少需要 10 位。";
+  } else if (!password) {
+    errors.password = "请输入月下誓言。";
   }
 
-  // Check registered users (localStorage)
-  const registered = loadRegisteredUsers();
-  const regUser = registered.find((u) => normalizeUsername(u.username) === normalized);
-  if (regUser && regUser.password === pw) {
-    return {
-      ok: true,
-      user: { username: regUser.username, role: "visitor", displayName: regUser.displayName }
-    };
+  if (mode === "apply" && String(values.displayName ?? "").trim().length > 40) {
+    errors.displayName = "称呼不能超过 40 个字符。";
   }
 
-  return { ok: false, reason: "invalid_credentials" };
+  if (mode === "apply" && String(values.note ?? "").trim().length > 500) {
+    errors.note = "来访缘由不能超过 500 个字符。";
+  }
+
+  return {
+    ok: Object.keys(errors).length === 0,
+    errors,
+    value: {
+      username,
+      password,
+      displayName: String(values.displayName ?? "").trim(),
+      note: String(values.note ?? "").trim()
+    }
+  };
 }
 
-export function getLandingPath(user) {
-  if (!user) return "#login";
-  return user.role === "admin" ? "#admin-vault" : "#night-archive";
-}
+export async function requestAccess(endpoint, payload) {
+  const response = await fetch(endpoint, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(payload)
+  });
 
-// ── Registration (localStorage) ────────────────────────────
-
-const STORAGE_KEY = "lilith_registered_users";
-
-export function loadRegisteredUsers() {
+  let data = {};
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    data = await response.json();
   } catch {
-    return [];
-  }
-}
-
-function saveRegisteredUsers(users) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-}
-
-export function registerUser(username, password, displayName) {
-  const normalized = normalizeUsername(username);
-
-  // Check against admin
-  if (normalizeUsername(ADMIN.username) === normalized) {
-    return { ok: false, reason: "That name belongs to the night itself." };
+    data = {};
   }
 
-  // Check against demo accounts
-  if (demoAccounts.some((a) => normalizeUsername(a.username) === normalized)) {
-    return { ok: false, reason: "Covenant names cannot be duplicated." };
+  if (!response.ok) {
+    const error = new Error(data.message || "身份服务暂时不可用。");
+    error.code = data.code || "request_failed";
+    error.status = response.status;
+    throw error;
   }
 
-  // Check against registered users
-  const existing = loadRegisteredUsers();
-  if (existing.some((u) => normalizeUsername(u.username) === normalized)) {
-    return { ok: false, reason: "A whisper by that name has already been marked." };
-  }
-
-  const display = displayName || username;
-  existing.push({ username, password, displayName: display });
-  saveRegisteredUsers(existing);
-  return { ok: true, user: { username, role: "visitor", displayName: display } };
+  return data;
 }

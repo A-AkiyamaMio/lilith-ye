@@ -1,163 +1,115 @@
-/usr/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh-CN.UTF-8): No such file or directory
-/usr/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh-CN.UTF-8): No such file or directory
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Lilith's Night - a gothic anime character entrance for lilith-ye.vip.">
+  <meta name="theme-color" content="#09070c">
+  <meta name="description" content="Lilith's Night — 一座只向获准访客开放的私人角色收藏馆。">
   <title>Lilith's Night</title>
-  <link rel="preload" href="assets/lilith-wide-hero.png" as="image">
-  <link rel="preload" href="assets/title-crest.svg" as="image">
+  <link rel="preload" href="assets/lilith-hero-v2.png" as="image" fetchpriority="high">
   <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
-  <div class="intro-curtain" aria-hidden="true">
-    <div class="intro-crest"></div>
-    <div class="intro-name">Lilith's Night</div>
-    <div class="intro-subtitle">The invitation is waking.</div>
-  </div>
-  <canvas id="embers" aria-hidden="true"></canvas>
-  <div class="cursor-aura" aria-hidden="true"></div>
+  <canvas class="embers" id="embers" aria-hidden="true"></canvas>
 
-  <div class="page-shell">
-    <aside class="side-rail" aria-label="Site navigation">
-      <a class="brand-mark" href="#login" aria-label="Lilith's Night home" data-admin-seal>
-        <span class="rose-sigil">L</span>
-        <span>Lilith's<br>Night</span>
+  <main class="entrance" id="entrance">
+    <div class="scene" aria-hidden="true">
+      <div class="scene-image"></div>
+      <div class="moon-bloom"></div>
+      <div class="candle-glow candle-glow-left"></div>
+      <div class="candle-glow candle-glow-center"></div>
+      <div class="mist mist-one"></div>
+      <div class="mist mist-two"></div>
+      <div class="scene-vignette"></div>
+    </div>
+
+    <header class="site-header">
+      <a class="wordmark" href="#entrance" aria-label="Lilith's Night 首页">
+        <span class="wordmark-seal" aria-hidden="true">L</span>
+        <span class="wordmark-copy">
+          <strong>Lilith's Night</strong>
+          <small>Private collection · XIII</small>
+        </span>
       </a>
 
-      <nav class="rail-nav">
-        <a href="#login" aria-current="page">Home</a>
-        <a href="#night-archive">Archive</a>
-        <a href="#memories">Memories</a>
-        <a href="#diary">Diary</a>
-        <a href="#whisper">Whisper</a>
-      </nav>
+      <div class="header-actions">
+        <span class="archive-state"><i></i> Archive sealed</span>
+        <button class="sound-toggle" type="button" aria-pressed="false" disabled title="环境音乐将在下一阶段加入">
+          <span>Ambient</span>
+          <strong>OFF</strong>
+        </button>
+      </div>
+    </header>
 
-      <button class="music-toggle" type="button" aria-pressed="false">
-        <span>Music</span>
-        <strong>OFF</strong>
-      </button>
-    </aside>
+    <section class="invitation" aria-labelledby="site-title">
+      <p class="eyebrow">lilith-ye.vip · invitation only</p>
+      <h1 id="site-title">
+        <span>Enter the</span>
+        <em>Night Archive</em>
+      </h1>
+      <p class="lead">这里收藏她的故事、影像与未曾说出口的低语。门只会为被记住的名字开启。</p>
 
-    <main>
-      <section class="login-stage" id="login" aria-labelledby="site-title">
-        <div class="ink-reveal" aria-hidden="true">
-          <span class="ink-drop ink-drop-a"></span>
-          <span class="ink-drop ink-drop-b"></span>
-          <span class="ink-drop ink-drop-c"></span>
-          <span class="ink-drop ink-drop-d"></span>
+      <div class="access-card">
+        <div class="access-tabs" role="tablist" aria-label="进入方式">
+          <button id="login-tab" class="access-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="access-form" data-mode="login">登录</button>
+          <button id="apply-tab" class="access-tab" type="button" role="tab" aria-selected="false" aria-controls="access-form" data-mode="apply">申请访问</button>
         </div>
-        <div class="castle-gate" aria-hidden="true"></div>
-        <div class="eye-glow eye-glow-left" aria-hidden="true"></div>
-        <div class="eye-glow eye-glow-right" aria-hidden="true"></div>
-        <div class="danger-vignette" aria-hidden="true"></div>
-        <div class="lilith-hand" aria-hidden="true"></div>
 
-        <div class="hero-copy">
-          <div class="crest" aria-hidden="true">L</div>
-          <p class="kicker">lilith-ye.vip</p>
-          <h1 id="site-title">Lilith's Night</h1>
-          <p class="invitation">The door hears only the names Lilith chooses to remember.</p>
-
-          <div class="night-letter covenant-panel" aria-label="Night covenant from Lilith">
-            <div class="covenant-aura" aria-hidden="true"></div>
-            <div class="letter-paper covenant-scroll">
-              <div class="letter-ornament" aria-hidden="true"></div>
-              <div class="letter-head">
-                <span>Covenant No. XIII</span>
-                <span>beneath Lilith's moon</span>
-              </div>
-              <form class="login-card" id="login-form" autocomplete="on">
-                <p class="letter-copy">A name is enough for the door to hear you. A vow is enough for Lilith to let you in.</p>
-                <div class="form-row">
-                  <label for="username">Name She Remembers</label>
-                  <input id="username" name="username" autocomplete="username" placeholder="write softly" required>
-                </div>
-                <div class="form-row">
-                  <label for="password">Vow Under The Moon</label>
-                  <input id="password" name="password" type="password" autocomplete="current-password" placeholder="bind the whisper" required>
-                </div>
-                <button class="enter-button" type="submit">
-                  <span>ACCEPT THE NIGHT</span>
-                </button>
-                <p class="form-message" id="form-message" role="status" aria-live="polite">The covenant waits for your whisper.</p>
-              </form>
-              <div class="lilith-sigil" aria-hidden="true">
-                <span class="sigil-letter">L</span>
-              </div>
-            </div>
+        <div class="form-heading">
+          <div>
+            <p class="form-kicker" id="form-kicker">THE REMEMBERED</p>
+            <h2 id="form-title">以获准的名字进入</h2>
           </div>
+          <span class="wax-mark" aria-hidden="true">L</span>
         </div>
 
-        <div class="ritual-strip" aria-label="Entrance animation sequence">
-          <span>Blackout</span>
-          <span>Mist</span>
-          <span>Whisper</span>
-          <span>Red Eyes</span>
-          <span>Seal</span>
-        </div>
-      </section>
-
-      <section class="inside" id="night-archive" aria-labelledby="archive-title" hidden>
-        <div class="inside-header">
-          <p class="kicker">Archive unlocked</p>
-          <h2 id="archive-title">Night Archive</h2>
-          <button class="ghost-button" type="button" data-logout>Leave</button>
-        </div>
-
-        <div class="inside-grid">
-          <article class="archive-panel match-panel">
-            <h3>Prologue</h3>
-            <p>The first moonlit covenant has been sealed. The character archive, gallery, collection, and diary will unfold here.</p>
-            <button class="match-button" type="button" data-match-trigger aria-label="Enter match">⚔ Match</button>
-          </article>
-          <article class="archive-panel image-panel">
-            <img src="assets/lilith-form.jpg" alt="Lilith gothic character form reference">
-          </article>
-          <article class="archive-panel">
-            <h3>Whisper</h3>
-            <p data-whisper-text>"Do not wake the roses before midnight."</p>
-          </article>
-        </div>
-
-        <button class="hidden-vault" type="button" data-vault-trigger aria-label="Hidden administrator vault"></button>
-      </section>
-
-      <section class="admin-vault" id="admin-vault" aria-labelledby="vault-title" hidden>
-        <div class="inside-header">
-          <p class="kicker">Keeper layer</p>
-          <h2 id="vault-title">Visitor Keys</h2>
-          <button class="ghost-button" type="button" data-close-vault>Return</button>
-        </div>
-        <div class="vault-layout">
-          <div class="archive-panel">
-            <h3>Demo Accounts</h3>
-            <ul class="account-list" id="account-list"></ul>
+        <form id="access-form" novalidate aria-labelledby="form-title">
+          <div class="field apply-only" hidden>
+            <label for="display-name">希望被如何称呼</label>
+            <input id="display-name" name="displayName" autocomplete="nickname" maxlength="40" placeholder="Display name">
           </div>
-          <div class="archive-panel">
-            <h3>Cloudflare Upgrade Path</h3>
-            <p>For production account management, connect this area to Cloudflare Functions and store hashed credentials in D1 or KV. The static page should keep only the interface, never real passwords.</p>
+
+          <div class="field">
+            <label for="username">名字</label>
+            <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]+" placeholder="Name she remembers" required>
+            <small class="apply-only" hidden>3–32 位，可使用字母、数字、下划线、点与连字符。</small>
           </div>
-        </div>
-      </section>
 
-      <section class="inside match-page" id="match-page" aria-labelledby="match-title" hidden>
-        <div class="inside-header">
-          <p class="kicker">⚔ Match</p>
-          <h2 id="match-title">The Arena</h2>
-          <button class="ghost-button" type="button" data-close-match>Return</button>
-        </div>
-        <div class="match-content">
-          <div class="maintenance-sigil" aria-hidden="true">🛠</div>
-          <p class="maintenance-text">系统维护中....</p>
-          <p class="maintenance-sub">The arena is being forged. Come back when the embers glow again.</p>
-        </div>
-      </section>
-    </main>
-  </div>
+          <div class="field">
+            <label for="password">月下誓言</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" minlength="10" maxlength="128" placeholder="Your private vow" required>
+            <small class="apply-only" hidden>至少 10 位；正式系统只保存不可逆的密码摘要。</small>
+          </div>
 
+          <div class="field apply-only" hidden>
+            <label for="note">来访缘由 <span>选填</span></label>
+            <textarea id="note" name="note" maxlength="500" rows="3" placeholder="Tell the keeper why you seek the archive"></textarea>
+          </div>
+
+          <button class="submit-button" type="submit">
+            <span class="button-label">开启封印</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+
+          <p class="form-message" id="form-message" role="status" aria-live="polite">仅已获批准的访客可以进入收藏馆。</p>
+        </form>
+      </div>
+
+      <div class="archive-preview" aria-label="收藏馆内容预览">
+        <span>01 · Character</span>
+        <span>02 · Gallery</span>
+        <span>03 · Memories</span>
+        <span>04 · Diary</span>
+      </div>
+    </section>
+
+    <footer class="entrance-footer">
+      <span>© 2026 Lilith's Night</span>
+      <span class="footer-whisper">The moon remembers every visitor.</span>
+    </footer>
+  </main>
+
+  <noscript>请启用 JavaScript 以使用登录和访问申请功能。</noscript>
   <script type="module" src="scripts/site.js"></script>
 </body>
 </html>
