@@ -53,7 +53,10 @@ export async function requestAccess(endpoint, payload) {
   }
 
   if (!response.ok) {
-    const error = new Error(data.message || "身份服务暂时不可用。");
+    const previewDiagnostic = location.hostname.endsWith(".pages.dev") && data.diagnostic
+      ? ` (${data.diagnostic})`
+      : "";
+    const error = new Error(`${data.message || "身份服务暂时不可用。"}${previewDiagnostic}`);
     error.code = data.code || "request_failed";
     error.status = response.status;
     throw error;
