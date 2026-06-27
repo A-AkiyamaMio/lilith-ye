@@ -1,0 +1,8 @@
+name = "lilith-ye"
+pages_build_output_dir = "."
+compatibility_date = "2026-06-19"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lilith-ye-db"
+database_id = "feb065ce-feb0-4671-90cf-027c504fbd52"
