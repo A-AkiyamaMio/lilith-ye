@@ -17,7 +17,7 @@ assert.ok(invalid.errors.username);
 assert.ok(invalid.errors.password);
 
 const encoded = await hashPassword("moonlit-covenant");
-assert.match(encoded, /^pbkdf2_sha256\$210000\$/);
+assert.match(encoded, /^pbkdf2_sha256\$100000\$/);
 assert.equal(await verifyPassword("moonlit-covenant", encoded), true);
 assert.equal(await verifyPassword("wrong-vow", encoded), false);
 

@@ -24,17 +24,6 @@ export async function onRequestPost({ request, env }) {
 
     return json({ ok: true, status: "pending", message: "申请已经封入信函，请等待守夜人的审批。" }, 201);
   } catch (error) {
-    // Preview-only diagnostics. Remove after the Cloudflare runtime issue is
-    // identified; production and the custom domain keep the generic response.
-    if (new URL(request.url).hostname.endsWith(".pages.dev") && !(error instanceof HttpError)) {
-      console.error(error);
-      return json({
-        ok: false,
-        code: "internal_error",
-        message: "夜之门暂时无法回应。",
-        diagnostic: error instanceof Error ? `${error.name}: ${error.message}` : "Unknown runtime error"
-      }, 500);
-    }
     return handleError(error);
   }
 }
