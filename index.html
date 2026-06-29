@@ -3,113 +3,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#09070c">
+  <meta name="theme-color" content="#080609">
   <meta name="description" content="Lilith's Night — 一座只向获准访客开放的私人角色收藏馆。">
   <title>Lilith's Night</title>
-  <link rel="preload" href="assets/lilith-hero-v2.png" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/whispering-archive-login.png" as="image" fetchpriority="high">
   <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
-  <canvas class="embers" id="embers" aria-hidden="true"></canvas>
-
   <main class="entrance" id="entrance">
-    <div class="scene" aria-hidden="true">
-      <div class="scene-image"></div>
-      <div class="moon-bloom"></div>
-      <div class="candle-glow candle-glow-left"></div>
-      <div class="candle-glow candle-glow-center"></div>
-      <div class="mist mist-one"></div>
-      <div class="mist mist-two"></div>
-      <div class="scene-vignette"></div>
+    <div class="stage-frame" id="stage-frame">
+      <div class="visual-layer" aria-hidden="true">
+        <img class="artwork" src="assets/whispering-archive-login.png" alt="">
+        <img class="moon-light-pass" src="assets/whispering-archive-login.png" alt="">
+      </div>
+
+      <section class="contract-ui" aria-label="夜之典藏访问入口">
+        <div class="tab-hit-area" role="tablist" aria-label="进入方式">
+          <button class="tab-hit is-active" id="login-tab" type="button" role="tab" aria-selected="true" data-mode="login">
+            <span class="sr-only">登录</span>
+          </button>
+          <button class="tab-hit" id="apply-tab" type="button" role="tab" aria-selected="false" data-mode="apply">
+            <span class="sr-only">申请访问</span>
+          </button>
+          <span class="tab-indicator" aria-hidden="true"></span>
+        </div>
+
+        <form class="login-form" id="access-form" novalidate>
+          <label class="sr-only" for="username">名字</label>
+          <input class="art-input art-input-name" id="username" name="username" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]+" placeholder="以获准的名字进入" required>
+
+          <label class="sr-only" for="password">月下誓言</label>
+          <input class="art-input art-input-vow" id="password" name="password" type="password" autocomplete="current-password" minlength="10" maxlength="128" placeholder="你的私人誓约" required>
+
+          <button class="seal-button" type="submit" aria-label="开启封印">
+            <span class="sr-only button-label">开启封印</span>
+          </button>
+          <p class="form-message" id="form-message" role="status" aria-live="polite">仅已获准的访问者可以进入夜藏馆。</p>
+        </form>
+      </section>
+
+      <div class="moon-hotspot" tabindex="0" role="button" aria-label="当前月相：满月，100%">
+        <span class="sr-only">满月 100%</span>
+      </div>
+
+      <nav class="archive-hotspots" aria-label="封印中的收藏分类">
+        <button type="button" data-archive="角色档案" aria-label="角色档案，尚未解锁"></button>
+        <button type="button" data-archive="禁忌影廊" aria-label="禁忌影廊，尚未解锁"></button>
+        <button type="button" data-archive="记忆残页" aria-label="记忆残页，尚未解锁"></button>
+        <button type="button" data-archive="夜之日记" aria-label="夜之日记，尚未解锁"></button>
+      </nav>
+
+      <div class="locked-popover" id="locked-popover" role="status" aria-live="polite">档案仍在封印中</div>
+
+      <section class="application-sheet" id="application-sheet" aria-labelledby="application-title" hidden>
+        <header>
+          <p>PRIVATE COVENANT</p>
+          <h2 id="application-title">申请访问夜之典藏</h2>
+          <button class="sheet-close" type="button" aria-label="关闭申请表">×</button>
+        </header>
+        <div class="sheet-fields">
+          <label for="display-name">希望被如何称呼</label>
+          <input id="display-name" name="displayName" form="access-form" autocomplete="nickname" maxlength="40" placeholder="Display name">
+
+          <label for="note">来访缘由 <span>选填</span></label>
+          <textarea id="note" name="note" form="access-form" maxlength="500" rows="3" placeholder="Tell the keeper why you seek the archive"></textarea>
+        </div>
+        <button class="sheet-submit" type="submit" form="access-form">递交契约</button>
+        <p>申请会进入守夜人的待审名单，通过后方可登录。</p>
+      </section>
     </div>
 
-    <header class="site-header">
-      <a class="wordmark" href="#entrance" aria-label="Lilith's Night 首页">
-        <span class="wordmark-seal" aria-hidden="true">L</span>
-        <span class="wordmark-copy">
-          <strong>Lilith's Night</strong>
-          <small>Private collection · XIII</small>
-        </span>
-      </a>
-
-      <div class="header-actions">
-        <span class="archive-state"><i></i> Archive sealed</span>
-        <button class="sound-toggle" type="button" aria-pressed="false" disabled title="环境音乐将在下一阶段加入">
-          <span>Ambient</span>
-          <strong>OFF</strong>
-        </button>
-      </div>
-    </header>
-
-    <section class="invitation" aria-labelledby="site-title">
-      <p class="eyebrow">lilith-ye.vip · invitation only</p>
-      <h1 id="site-title">
-        <span>Enter the</span>
-        <em>Night Archive</em>
-      </h1>
-      <p class="lead">这里收藏她的故事、影像与未曾说出口的低语。门只会为被记住的名字开启。</p>
-
-      <div class="access-card">
-        <div class="access-tabs" role="tablist" aria-label="进入方式">
-          <button id="login-tab" class="access-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="access-form" data-mode="login">登录</button>
-          <button id="apply-tab" class="access-tab" type="button" role="tab" aria-selected="false" aria-controls="access-form" data-mode="apply">申请访问</button>
+    <section class="mobile-access" aria-label="移动端访问入口">
+      <p class="mobile-kicker">LILITH-YE.VIP · INVITATION ONLY</p>
+      <h1>Enter the <em>Night Archive</em></h1>
+      <p class="mobile-lead">这里收藏她的故事、影像与未曾说出口的低语。门只会为被记住的名字开启。</p>
+      <div class="mobile-panel">
+        <div class="mobile-tabs" role="tablist" aria-label="进入方式">
+          <button type="button" data-mobile-mode="login" class="is-active">登录</button>
+          <button type="button" data-mobile-mode="apply">申请访问</button>
         </div>
-
-        <div class="form-heading">
-          <div>
-            <p class="form-kicker" id="form-kicker">THE REMEMBERED</p>
-            <h2 id="form-title">以获准的名字进入</h2>
-          </div>
-          <span class="wax-mark" aria-hidden="true">L</span>
+        <label for="mobile-username">名字</label>
+        <input id="mobile-username" autocomplete="username" placeholder="以获准的名字进入">
+        <label for="mobile-password">月下誓言</label>
+        <input id="mobile-password" type="password" autocomplete="current-password" placeholder="你的私人誓约">
+        <div class="mobile-application-fields" hidden>
+          <label for="mobile-display-name">希望被如何称呼</label>
+          <input id="mobile-display-name" autocomplete="nickname" maxlength="40" placeholder="Display name">
+          <label for="mobile-note">来访缘由 <span>选填</span></label>
+          <textarea id="mobile-note" maxlength="500" rows="3" placeholder="Tell the keeper why you seek the archive"></textarea>
         </div>
-
-        <form id="access-form" novalidate aria-labelledby="form-title">
-          <div class="field apply-only" hidden>
-            <label for="display-name">希望被如何称呼</label>
-            <input id="display-name" name="displayName" autocomplete="nickname" maxlength="40" placeholder="Display name">
-          </div>
-
-          <div class="field">
-            <label for="username">名字</label>
-            <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]+" placeholder="Name she remembers" required>
-            <small class="apply-only" hidden>3–32 位，可使用字母、数字、下划线、点与连字符。</small>
-          </div>
-
-          <div class="field">
-            <label for="password">月下誓言</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" minlength="10" maxlength="128" placeholder="Your private vow" required>
-            <small class="apply-only" hidden>至少 10 位；正式系统只保存不可逆的密码摘要。</small>
-          </div>
-
-          <div class="field apply-only" hidden>
-            <label for="note">来访缘由 <span>选填</span></label>
-            <textarea id="note" name="note" maxlength="500" rows="3" placeholder="Tell the keeper why you seek the archive"></textarea>
-          </div>
-
-          <button class="submit-button" type="submit">
-            <span class="button-label">开启封印</span>
-            <span class="button-arrow" aria-hidden="true">↗</span>
-          </button>
-
-          <p class="form-message" id="form-message" role="status" aria-live="polite">仅已获批准的访客可以进入收藏馆。</p>
-        </form>
-      </div>
-
-      <div class="archive-preview" aria-label="收藏馆内容预览">
-        <span>01 · Character</span>
-        <span>02 · Gallery</span>
-        <span>03 · Memories</span>
-        <span>04 · Diary</span>
+        <button class="mobile-submit" type="button">开启封印</button>
+        <p class="mobile-message">仅已获准的访问者可以进入夜藏馆。</p>
       </div>
     </section>
-
-    <footer class="entrance-footer">
-      <span>© 2026 Lilith's Night</span>
-      <span class="footer-whisper">The moon remembers every visitor.</span>
-    </footer>
   </main>
 
   <noscript>请启用 JavaScript 以使用登录和访问申请功能。</noscript>
+  <script src="scripts/vendor/gsap.min.js"></script>
   <script type="module" src="scripts/site.js"></script>
 </body>
 </html>

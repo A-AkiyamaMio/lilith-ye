@@ -10,11 +10,13 @@ for (const content of [html, css, js, auth]) {
   assert.doesNotMatch(content, /\/usr\/bin\/bash: warning/);
 }
 
-assert.match(html, /lilith-hero-v2\.png/);
+assert.match(html, /whispering-archive-login\.png/);
 assert.match(html, /data-mode="login"/);
 assert.match(html, /data-mode="apply"/);
-assert.match(css, /sceneBreath/);
-assert.match(css, /candleFlicker/);
+assert.match(html, /scripts\/vendor\/gsap\.min\.js/);
+assert.match(css, /application-sheet/);
+assert.match(js, /gsap\.timeline/);
+assert.match(js, /gsap\.matchMedia/);
 assert.match(js, /\/api\/auth\/register/);
 assert.doesNotMatch(auth, /localStorage/);
 assert.doesNotMatch(auth, /demoAccounts|ADMIN|password:\s*["']/);
