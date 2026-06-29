@@ -15,7 +15,7 @@
 - P0: none
 - P1: none
 - P2: none
-- P3: ultra-wide screens intentionally use a dark same-image ambient extension at the sides so the complete 16:9 composition remains visible without stretching or cropping.
+- P3: ultra-wide screens intentionally use a near-black cinematic frame at the sides so the complete 16:9 composition remains visible without stretching, duplicated imagery, or cropping.
 
 ## Required fidelity surfaces
 
@@ -27,7 +27,7 @@
 
 ## Patches made since the previous QA pass
 
-- Replaced cover scaling with contain scaling and same-source ambient side fill.
+- Replaced cover scaling with contain scaling and a near-black cinematic side frame.
 - Repainted the dress material and preserved partial lace trim.
 - Added dedicated blink and login-success raster frames.
 - Added GSAP hair, dress, moon, eye-glint, blink, candle-extinguish, seal-crack, and entry timelines.

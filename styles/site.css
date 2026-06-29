@@ -61,17 +61,15 @@ textarea:focus-visible {
 
 .ambient-fill {
   position: absolute;
-  inset: -28px;
-  background: #080609 url("../assets/whispering-archive-login-v2.png") center/cover no-repeat;
-  filter: blur(20px) brightness(.34) saturate(.7);
-  transform: scale(1.04);
+  inset: 0;
+  background: #050407;
 }
 
 .ambient-fill::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgb(6 4 8 / 28%);
+  background: rgb(0 0 0 / 12%);
 }
 
 .stage-frame {
