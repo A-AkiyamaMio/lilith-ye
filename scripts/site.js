@@ -20,6 +20,14 @@ const mobileMessage = document.querySelector(".mobile-message");
 let mode = "login";
 let popoverTween;
 let ambientTimeline;
+let blinkCall;
+
+function hydrateDesktopAssets() {
+  if (innerWidth <= 700) return;
+  document.querySelectorAll("[data-motion-src]").forEach((image) => {
+    if (!image.hasAttribute("src")) image.src = image.dataset.motionSrc;
+  });
+}
 
 const copy = {
   login: {
@@ -34,7 +42,8 @@ const copy = {
 
 function resizeStage() {
   if (!stage || innerWidth <= 700) return;
-  const scale = Math.max(innerWidth / STAGE_WIDTH, innerHeight / STAGE_HEIGHT);
+  hydrateDesktopAssets();
+  const scale = Math.min(innerWidth / STAGE_WIDTH, innerHeight / STAGE_HEIGHT);
   const x = (innerWidth - STAGE_WIDTH * scale) / 2;
   const y = (innerHeight - STAGE_HEIGHT * scale) / 2;
   stage.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
@@ -100,7 +109,7 @@ function setMode(nextMode) {
     });
   }
 
-  setApplicationSheet(mode === "apply");
+  setApplicationSheet(mode === "apply" && innerWidth > 700);
 }
 
 function shakeForm() {
@@ -118,6 +127,23 @@ function revealLocked(messageText) {
   popoverTween = gsap?.timeline()
     .fromTo(lockedPopover, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .25, ease: "power2.out" })
     .to(lockedPopover, { autoAlpha: 0, y: -5, duration: .28, ease: "power2.in" }, "+=1.15");
+}
+
+function playEntranceTransition(redirect) {
+  if (!gsap || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (redirect) window.location.assign(redirect);
+    return;
+  }
+
+  ambientTimeline?.pause();
+  const enterArchive = gsap.timeline({ defaults: { overwrite: "auto" } });
+  enterArchive
+    .to([".success-candle-left", ".success-candle-right"], { autoAlpha: 1, duration: .18, ease: "power2.out" }, 0)
+    .to(".success-seal", { autoAlpha: 1, duration: .16, ease: "power2.out" }, .08)
+    .to(".seal-button", { x: -3, rotation: -1.4, duration: .08, repeat: 5, yoyo: true }, .08)
+    .to(".night-veil", { autoAlpha: 1, duration: .75, ease: "power2.in" }, .42)
+    .to(".stage-frame", { scale: "+=.012", duration: .75, ease: "power2.in" }, .42)
+    .call(() => { if (redirect) window.location.assign(redirect); });
 }
 
 function initMotion() {
@@ -142,14 +168,30 @@ function initMotion() {
       .from(".moon-hotspot", { autoAlpha: 0, scale: .94, transformOrigin: "center", duration: .7 }, .66);
 
     ambientTimeline = gsap.timeline({ repeat: -1, yoyo: true, defaults: { ease: "sine.inOut" } })
-      .to(".artwork", { x: -3.5, y: -2, scale: 1.006, duration: 12 }, 0)
-      .to(".moon-light-pass", { autoAlpha: .24, scale: 1.008, duration: 4.8 }, 0)
-      .to(".moon-light-pass", { autoAlpha: .08, duration: 2.8 }, 4.8);
+      .to(".hair-motion", { x: 3.2, y: 1.5, rotation: .18, transformOrigin: "72% 12%", duration: 10.5 }, 0)
+      .to(".dress-motion", { x: 1.8, y: 1, rotation: -.12, transformOrigin: "68% 55%", duration: 9.2 }, 0)
+      .to(".moon-light-pass", { autoAlpha: .26, scale: 1.006, transformOrigin: "89% 14%", duration: 5.5 }, 0)
+      .to(".moon-light-pass", { autoAlpha: .1, duration: 3.2 }, 5.5);
+
+    const scheduleBlink = () => {
+      const delay = gsap.utils.random(4.8, 8.5);
+      blinkCall = gsap.delayedCall(delay, () => {
+        if (!document.hidden) {
+          gsap.timeline()
+            .to(".blink-pass", { autoAlpha: 1, duration: .07, ease: "power1.in" })
+            .to(".blink-pass", { autoAlpha: 0, duration: .11, ease: "power1.out" }, "+=.055");
+        }
+        scheduleBlink();
+      });
+    };
+    scheduleBlink();
 
     const xTo = gsap.quickTo(".visual-layer", "x", { duration: 1.1, ease: "power3.out" });
     const yTo = gsap.quickTo(".visual-layer", "y", { duration: 1.1, ease: "power3.out" });
     const contractX = gsap.quickTo(".contract-ui", "x", { duration: .9, ease: "power3.out" });
     const contractY = gsap.quickTo(".contract-ui", "y", { duration: .9, ease: "power3.out" });
+    const glintX = gsap.quickTo(".eye-glint-motion", "x", { duration: .7, ease: "power3.out" });
+    const glintY = gsap.quickTo(".eye-glint-motion", "y", { duration: .7, ease: "power3.out" });
 
     const pointerMove = (event) => {
       const nx = gsap.utils.normalize(0, innerWidth, event.clientX) - .5;
@@ -158,6 +200,8 @@ function initMotion() {
       yTo(ny * -5);
       contractX(nx * 2.2);
       contractY(ny * 1.6);
+      glintX(nx * 1.25);
+      glintY(ny * .8);
     };
 
     addEventListener("pointermove", pointerMove, { passive: true });
@@ -165,6 +209,7 @@ function initMotion() {
       removeEventListener("pointermove", pointerMove);
       intro.kill();
       ambientTimeline?.kill();
+      blinkCall?.kill();
     };
   });
 
@@ -213,8 +258,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     setMessage("身份已确认，正在开启收藏馆……", "success");
-    gsap?.to(".visual-layer", { autoAlpha: 0, scale: 1.02, duration: .6, ease: "power2.in" });
-    setTimeout(() => window.location.assign(data.redirect || "/archive/"), 620);
+    playEntranceTransition(data.redirect || "/archive/");
   } catch (error) {
     const localPreview = error.status === 404 && ["localhost", "127.0.0.1"].includes(location.hostname);
     setMessage(
@@ -270,3 +314,7 @@ addEventListener("resize", resizeStage, { passive: true });
 resizeStage();
 setMode("login");
 initMotion();
+
+if (["localhost", "127.0.0.1"].includes(location.hostname) && new URLSearchParams(location.search).get("motion") === "success") {
+  setTimeout(() => playEntranceTransition(null), 700);
+}

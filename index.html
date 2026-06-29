@@ -6,15 +6,26 @@
   <meta name="theme-color" content="#080609">
   <meta name="description" content="Lilith's Night — 一座只向获准访客开放的私人角色收藏馆。">
   <title>Lilith's Night</title>
-  <link rel="preload" href="assets/whispering-archive-login.png" as="image" fetchpriority="high">
-  <link rel="stylesheet" href="styles/site.css?v=20260629-1">
+  <link rel="preload" href="assets/whispering-archive-login-v2.png" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/whispering-archive-blink.png" as="image" media="(min-width: 701px)">
+  <link rel="preload" href="assets/whispering-archive-success.png" as="image" media="(min-width: 701px)">
+  <link rel="stylesheet" href="styles/site.css?v=20260629-2">
 </head>
 <body>
   <main class="entrance" id="entrance">
+    <div class="ambient-fill" aria-hidden="true"></div>
     <div class="stage-frame" id="stage-frame">
       <div class="visual-layer" aria-hidden="true">
-        <img class="artwork" src="assets/whispering-archive-login.png" alt="">
-        <img class="moon-light-pass" src="assets/whispering-archive-login.png" alt="">
+        <img class="artwork" src="assets/whispering-archive-login-v2.png" alt="">
+        <img class="motion-region hair-motion" data-motion-src="assets/whispering-archive-login-v2.png" alt="">
+        <img class="motion-region dress-motion" data-motion-src="assets/whispering-archive-login-v2.png" alt="">
+        <img class="motion-region eye-glint-motion" data-motion-src="assets/whispering-archive-login-v2.png" alt="">
+        <img class="moon-light-pass" data-motion-src="assets/whispering-archive-login-v2.png" alt="">
+        <img class="blink-pass" data-motion-src="assets/whispering-archive-blink.png" alt="">
+        <img class="success-pass success-candle-left" data-motion-src="assets/whispering-archive-success.png" alt="">
+        <img class="success-pass success-candle-right" data-motion-src="assets/whispering-archive-success.png" alt="">
+        <img class="success-pass success-seal" data-motion-src="assets/whispering-archive-success.png" alt="">
+        <div class="night-veil"></div>
       </div>
 
       <section class="contract-ui" aria-label="夜之典藏访问入口">
@@ -99,7 +110,7 @@
   </main>
 
   <noscript>请启用 JavaScript 以使用登录和访问申请功能。</noscript>
-  <script src="scripts/vendor/gsap.min.js?v=20260629-1"></script>
-  <script type="module" src="scripts/site.js?v=20260629-1"></script>
+  <script src="scripts/vendor/gsap.min.js?v=20260629-2"></script>
+  <script type="module" src="scripts/site.js?v=20260629-2"></script>
 </body>
 </html>
