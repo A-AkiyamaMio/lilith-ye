@@ -6,6 +6,8 @@
 - Success transition screenshot: `tmp/design/success-transition-v2.png`
 - Mobile screenshot: `tmp/design/mobile-v2.png`
 - Combined comparison: `tmp/design/qa-comparison-v2.png`
+- Card implementation screenshot: `tmp/design/card-portraits-v4.png`
+- Card source/implementation comparison: `tmp/design/card-comparison-v4.png`
 - Desktop viewport: 1911 × 917
 - Mobile viewport: 390 × 844
 - States: desktop login, filled controls, application tab, success transition, mobile login/application
@@ -23,6 +25,7 @@
 - Spacing and layout rhythm: the 1664 × 936 stage is now contain-scaled and centered. At 1911 × 917 it renders at 1630.22 × 917 with no top, bottom, left, or right artwork crop. Live fields align to the illustrated fields.
 - Colors and tokens: parchment, black, wine, gold, and moon-violet values remain unchanged; browser autofill is normalized to the dark field surface.
 - Image quality and asset fidelity: the dress is satin/fine fabric with lace limited to trim. Blink and success states use dedicated raster frames rather than code-drawn substitutes.
+- Collection portraits: four dedicated daily-life raster illustrations preserve Lilith's black hair, red eyes and flower ornament while varying hairstyle, expression, pose and lightweight outfit. The white camisole and summer pajamas use natural moderate body proportions.
 - Copy and content: login, application, approval, archive labels, and status copy are preserved.
 
 ## Patches made since the previous QA pass
@@ -33,6 +36,7 @@
 - Added GSAP hair, dress, moon, eye-glint, blink, candle-extinguish, seal-crack, and entry timelines.
 - Corrected browser autofill styling and moved the status line below the seal.
 - Deferred desktop-only motion assets on mobile.
+- Replaced the four blurred archive placeholders with the white-camisole wink, summer-pajama braids, sailor-blouse toast, and floral-dress side-braid portraits; these assets are also deferred on mobile.
 
 Full-view and focused login/dress comparisons show no actionable mismatch. The success-state frame verifies both candle flames are extinguished and the seal is visibly split before the page fades into the archive.
 

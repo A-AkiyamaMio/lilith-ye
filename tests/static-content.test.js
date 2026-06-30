@@ -13,6 +13,10 @@ for (const content of [html, css, js, auth]) {
 assert.match(html, /whispering-archive-login-v2\.png/);
 assert.match(html, /whispering-archive-blink\.png/);
 assert.match(html, /whispering-archive-success\.png/);
+assert.match(html, /lilith-card-camisole\.png/);
+assert.match(html, /lilith-card-pajamas\.png/);
+assert.match(html, /lilith-card-cardigan\.png/);
+assert.match(html, /lilith-card-floral\.png/);
 assert.match(html, /data-mode="login"/);
 assert.match(html, /data-mode="apply"/);
 assert.match(html, /scripts\/vendor\/gsap\.min\.js/);

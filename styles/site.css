@@ -279,9 +279,35 @@ textarea:focus-visible {
 }
 
 .archive-hotspots button {
+  position: relative;
+  overflow: hidden;
   border: 0;
   background: transparent;
   cursor: not-allowed;
+}
+
+.archive-portrait {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  left: 5px;
+  width: calc(100% - 10px);
+  height: 118px;
+  object-fit: cover;
+  object-position: 50% 38%;
+  opacity: .82;
+  filter: brightness(.62) saturate(.78) contrast(1.08);
+  pointer-events: none;
+  transition: transform .55s ease, filter .55s ease, opacity .55s ease;
+}
+
+.archive-portrait-floral { object-position: 50% 32%; }
+
+.archive-hotspots button:hover .archive-portrait,
+.archive-hotspots button:focus-visible .archive-portrait {
+  transform: scale(1.035);
+  opacity: .96;
+  filter: brightness(.82) saturate(.92) contrast(1.04);
 }
 
 .locked-popover {

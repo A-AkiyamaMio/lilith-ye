@@ -24,8 +24,8 @@ let blinkCall;
 
 function hydrateDesktopAssets() {
   if (innerWidth <= 700) return;
-  document.querySelectorAll("[data-motion-src]").forEach((image) => {
-    if (!image.hasAttribute("src")) image.src = image.dataset.motionSrc;
+  document.querySelectorAll("[data-motion-src], [data-card-src]").forEach((image) => {
+    if (!image.hasAttribute("src")) image.src = image.dataset.motionSrc || image.dataset.cardSrc;
   });
 }
 
