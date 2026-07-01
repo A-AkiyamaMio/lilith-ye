@@ -11,7 +11,7 @@ for (const content of [html, css, js, auth]) {
 }
 
 assert.match(html, /whispering-archive-login-v2\.png/);
-assert.match(html, /whispering-archive-blink\.png/);
+assert.doesNotMatch(html, /whispering-archive-blink\.png/);
 assert.match(html, /whispering-archive-success\.png/);
 assert.match(html, /lilith-card-camisole\.png/);
 assert.match(html, /lilith-card-pajamas\.png/);
@@ -24,7 +24,7 @@ assert.match(css, /application-sheet/);
 assert.match(js, /gsap\.timeline/);
 assert.match(js, /gsap\.matchMedia/);
 assert.match(js, /Math\.min\(innerWidth \/ STAGE_WIDTH/);
-assert.match(js, /scheduleBlink/);
+assert.doesNotMatch(js, /scheduleBlink|hair-motion|dress-motion|eye-glint-motion/);
 assert.match(js, /success-candle-left/);
 assert.match(js, /\/api\/auth\/register/);
 assert.doesNotMatch(auth, /localStorage/);

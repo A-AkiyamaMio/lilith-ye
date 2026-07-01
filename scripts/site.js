@@ -19,8 +19,6 @@ const mobileMessage = document.querySelector(".mobile-message");
 
 let mode = "login";
 let popoverTween;
-let ambientTimeline;
-let blinkCall;
 
 function hydrateDesktopAssets() {
   if (innerWidth <= 700) return;
@@ -135,7 +133,6 @@ function playEntranceTransition(redirect) {
     return;
   }
 
-  ambientTimeline?.pause();
   const enterArchive = gsap.timeline({ defaults: { overwrite: "auto" } });
   enterArchive
     .to([".success-candle-left", ".success-candle-right"], { autoAlpha: 1, duration: .18, ease: "power2.out" }, 0)
@@ -167,49 +164,8 @@ function initMotion() {
       .from(".archive-hotspots button", { autoAlpha: 0, y: 8, duration: .48, stagger: .08 }, .78)
       .from(".moon-hotspot", { autoAlpha: 0, scale: .94, transformOrigin: "center", duration: .7 }, .66);
 
-    ambientTimeline = gsap.timeline({ repeat: -1, yoyo: true, defaults: { ease: "sine.inOut" } })
-      .to(".hair-motion", { x: 3.2, y: 1.5, rotation: .18, transformOrigin: "72% 12%", duration: 10.5 }, 0)
-      .to(".dress-motion", { x: 1.8, y: 1, rotation: -.12, transformOrigin: "68% 55%", duration: 9.2 }, 0)
-      .to(".moon-light-pass", { autoAlpha: .26, scale: 1.006, transformOrigin: "89% 14%", duration: 5.5 }, 0)
-      .to(".moon-light-pass", { autoAlpha: .1, duration: 3.2 }, 5.5);
-
-    const scheduleBlink = () => {
-      const delay = gsap.utils.random(4.8, 8.5);
-      blinkCall = gsap.delayedCall(delay, () => {
-        if (!document.hidden) {
-          gsap.timeline()
-            .to(".blink-pass", { autoAlpha: 1, duration: .07, ease: "power1.in" })
-            .to(".blink-pass", { autoAlpha: 0, duration: .11, ease: "power1.out" }, "+=.055");
-        }
-        scheduleBlink();
-      });
-    };
-    scheduleBlink();
-
-    const xTo = gsap.quickTo(".visual-layer", "x", { duration: 1.1, ease: "power3.out" });
-    const yTo = gsap.quickTo(".visual-layer", "y", { duration: 1.1, ease: "power3.out" });
-    const contractX = gsap.quickTo(".contract-ui", "x", { duration: .9, ease: "power3.out" });
-    const contractY = gsap.quickTo(".contract-ui", "y", { duration: .9, ease: "power3.out" });
-    const glintX = gsap.quickTo(".eye-glint-motion", "x", { duration: .7, ease: "power3.out" });
-    const glintY = gsap.quickTo(".eye-glint-motion", "y", { duration: .7, ease: "power3.out" });
-
-    const pointerMove = (event) => {
-      const nx = gsap.utils.normalize(0, innerWidth, event.clientX) - .5;
-      const ny = gsap.utils.normalize(0, innerHeight, event.clientY) - .5;
-      xTo(nx * -7);
-      yTo(ny * -5);
-      contractX(nx * 2.2);
-      contractY(ny * 1.6);
-      glintX(nx * 1.25);
-      glintY(ny * .8);
-    };
-
-    addEventListener("pointermove", pointerMove, { passive: true });
     return () => {
-      removeEventListener("pointermove", pointerMove);
       intro.kill();
-      ambientTimeline?.kill();
-      blinkCall?.kill();
     };
   });
 
@@ -304,11 +260,6 @@ new MutationObserver(() => {
   mobileMessage.textContent = message.textContent;
   mobileMessage.className = `mobile-message${message.classList.contains("is-error") ? " is-error" : message.classList.contains("is-success") ? " is-success" : ""}`;
 }).observe(message, { childList: true, attributes: true, attributeFilter: ["class"] });
-
-document.addEventListener("visibilitychange", () => {
-  if (!ambientTimeline) return;
-  document.hidden ? ambientTimeline.pause() : ambientTimeline.resume();
-});
 
 addEventListener("resize", resizeStage, { passive: true });
 resizeStage();

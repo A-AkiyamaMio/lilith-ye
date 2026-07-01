@@ -62,7 +62,7 @@ textarea:focus-visible {
 .ambient-fill {
   position: absolute;
   inset: 0;
-  background: #050407 url("../assets/whispering-archive-ambient-wide.png") center/cover no-repeat;
+  background: linear-gradient(90deg, #08060a 0 50%, #100b17 50% 100%);
 }
 
 .ambient-fill::after {
@@ -86,9 +86,6 @@ textarea:focus-visible {
 
 .visual-layer,
 .artwork,
-.moon-light-pass,
-.motion-region,
-.blink-pass,
 .success-pass,
 .night-veil {
   position: absolute;
@@ -100,9 +97,6 @@ textarea:focus-visible {
 .visual-layer { overflow: hidden; }
 
 .artwork,
-.moon-light-pass,
-.motion-region,
-.blink-pass,
 .success-pass {
   display: block;
   object-fit: cover;
@@ -111,41 +105,8 @@ textarea:focus-visible {
   will-change: transform, opacity;
 }
 
-.moon-light-pass {
-  clip-path: inset(0 0 70% 76%);
-  opacity: 0;
-  filter: brightness(1.15) saturate(.88);
-}
-
-.motion-region,
-.blink-pass,
 .success-pass {
   opacity: 0;
-}
-
-.hair-motion {
-  clip-path: polygon(57% 4%, 72% 0, 91% 48%, 90% 63%, 79% 66%, 68% 61%, 58% 45%);
-  opacity: 1;
-  will-change: transform;
-}
-
-.dress-motion {
-  clip-path: polygon(59% 36%, 68% 34%, 79% 43%, 80% 64%, 70% 65%, 61% 60%);
-  opacity: 1;
-  will-change: transform;
-}
-
-.eye-glint-motion {
-  clip-path: inset(11% 28% 73% 60%);
-  opacity: .16;
-  mix-blend-mode: screen;
-  filter: brightness(1.18) saturate(1.1);
-  will-change: transform;
-}
-
-.blink-pass {
-  clip-path: inset(11% 28% 73% 60%);
-  will-change: opacity;
 }
 
 .success-candle-left { clip-path: inset(50% 53% 35% 40%); }
