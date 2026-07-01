@@ -62,7 +62,7 @@ textarea:focus-visible {
 .ambient-fill {
   position: absolute;
   inset: 0;
-  background: #050407;
+  background: #050407 url("../assets/whispering-archive-ambient-wide.png") center/cover no-repeat;
 }
 
 .ambient-fill::after {
@@ -288,20 +288,53 @@ textarea:focus-visible {
 
 .archive-portrait {
   position: absolute;
-  top: 10px;
-  right: 5px;
-  left: 5px;
+  z-index: 1;
+  inset: 5px;
   width: calc(100% - 10px);
-  height: 118px;
+  height: calc(100% - 10px);
   object-fit: cover;
-  object-position: 50% 38%;
-  opacity: .82;
-  filter: brightness(.62) saturate(.78) contrast(1.08);
+  object-position: 50% 28%;
+  opacity: .78;
+  filter: brightness(.58) saturate(.8) contrast(1.08);
   pointer-events: none;
   transition: transform .55s ease, filter .55s ease, opacity .55s ease;
 }
 
-.archive-portrait-floral { object-position: 50% 32%; }
+.archive-hotspots button:nth-child(2) .archive-portrait { object-position: 50% 30%; }
+.archive-hotspots button:nth-child(3) .archive-portrait { object-position: 50% 25%; }
+.archive-portrait-floral { object-position: 50% 27%; }
+
+.archive-label {
+  position: absolute;
+  z-index: 2;
+  right: 5px;
+  bottom: 5px;
+  left: 5px;
+  display: flex;
+  min-height: 58px;
+  border-top: 1px solid rgb(193 158 99 / 32%);
+  background: rgb(7 5 9 / 88%);
+  color: #d8c19a;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.12;
+  pointer-events: none;
+}
+
+.archive-label small {
+  font: 500 13px/1.15 "Cormorant Garamond", Georgia, serif;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+.archive-label strong {
+  margin-top: 4px;
+  color: #bcae9a;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .08em;
+}
 
 .archive-hotspots button:hover .archive-portrait,
 .archive-hotspots button:focus-visible .archive-portrait {
