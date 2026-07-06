@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#08060a" />
+  <meta name="description" content="莉莉丝的天鹅绒魔镜——角色档案与互动故事站。" />
+  <title>Lilith · Velvet Mirror</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="presence-canvas" aria-hidden="true"></canvas>
+  <main>
+    <section id="auth-view" class="view auth-view is-active" aria-label="账号入口">
+      <div class="character-stage" id="character-stage">
+        <img class="character-image" src="./assets/lilith-velvet-mirror.png" alt="红瞳黑发、身着哥特礼裙的莉莉丝站在月夜魔镜旁" />
+        <div class="character-breath" aria-hidden="true"></div>
+        <div class="eye-glow eye-left" aria-hidden="true"></div>
+        <div class="eye-glow eye-right" aria-hidden="true"></div>
+        <div class="stage-vignette" aria-hidden="true"></div>
+      </div>
+
+      <div class="auth-panel glass-panel">
+        <header class="brand-lockup">
+          <p class="eyebrow">VELVET MIRROR</p>
+          <h1>LILITH</h1>
+          <p class="brand-note">The mirror remembers what you dare to forget.</p>
+        </header>
+
+        <div class="auth-tabs" role="tablist" aria-label="账号操作">
+          <button class="auth-tab is-active" data-mode="login" role="tab" aria-selected="true">登录</button>
+          <button class="auth-tab" data-mode="signup" role="tab" aria-selected="false">注册</button>
+        </div>
+
+        <form id="auth-form" novalidate>
+          <label class="field">
+            <span>邮箱</span>
+            <span class="input-wrap"><input id="email" type="email" autocomplete="email" placeholder="name@domain.com" required><i class="ph ph-envelope-simple"></i></span>
+          </label>
+          <label class="field">
+            <span id="password-label">密码</span>
+            <span class="input-wrap"><input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="至少 8 位" required><button type="button" id="toggle-password" aria-label="显示密码"><i class="ph ph-eye"></i></button></span>
+          </label>
+          <div class="form-meta">
+            <label class="check"><input type="checkbox" id="remember" checked><span>记住我</span></label>
+            <button type="button" class="text-action" id="reset-password">忘记密码</button>
+          </div>
+          <p id="auth-status" class="status" aria-live="polite"></p>
+          <button class="primary-button" type="submit"><span id="submit-label">踏入镜中</span><i class="ph ph-sparkle"></i></button>
+        </form>
+        <p class="config-warning" id="config-warning" hidden>尚未连接 Supabase。完成配置后即可使用真实账号。</p>
+      </div>
+    </section>
+
+    <section id="transition-view" class="view transition-view" aria-hidden="true">
+      <div class="mirror-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="fractures" aria-hidden="true"></div>
+      <div class="transition-copy"><p class="eyebrow">IDENTITY ACCEPTED</p><h2>镜面为你开启</h2><p>莉莉丝正在另一侧等待。</p><div class="loading-sigils"><i></i><i></i><i></i></div></div>
+    </section>
+
+    <section id="archive-view" class="view archive-view" aria-hidden="true">
+      <aside class="sidebar glass-panel">
+        <div><p class="sidebar-brand">LILITH</p><p class="eyebrow">PRIVATE ARCHIVE</p></div>
+        <nav id="archive-nav" aria-label="角色档案栏目">
+          <button class="nav-item is-active" data-section="sanctum"><i class="ph ph-moon"></i><span>圣所</span></button>
+          <button class="nav-item" data-section="chronicles"><i class="ph ph-book-open-text"></i><span>故事</span></button>
+          <button class="nav-item" data-section="portraits"><i class="ph ph-image"></i><span>画廊</span></button>
+          <button class="nav-item" data-section="wardrobe"><i class="ph ph-dress"></i><span>礼装</span></button>
+          <button class="nav-item" data-section="voice"><i class="ph ph-waveform"></i><span>语音信笺</span></button>
+          <button class="nav-item" data-section="timeline"><i class="ph ph-clock-counter-clockwise"></i><span>时间线</span></button>
+        </nav>
+        <div class="visitor-card"><span class="eyebrow">NIGHT VISITOR</span><strong id="visitor-email">Mirror bond · stable</strong><button id="sign-out" class="text-action">退出登录</button></div>
+      </aside>
+
+      <div class="archive-backdrop"><img src="./assets/lilith-velvet-mirror.png" alt="莉莉丝与月夜魔镜"><div></div></div>
+      <div class="archive-content">
+        <header class="archive-header"><p class="eyebrow">THE VELVET SANCTUM / 01</p><div class="header-actions"><button id="sound-toggle"><i class="ph ph-speaker-high"></i><span>声音</span></button><button id="motion-toggle"><i class="ph ph-orbit"></i><span>动态</span></button></div></header>
+        <article class="hero-copy section-panel is-active" data-panel="sanctum"><p class="eyebrow">WELCOME BACK, VISITOR</p><h2>Lilith</h2><p>一抹拥有绯红目光的天鹅绒暗影——遗失姓名、月夜誓言，以及只被镜子记住的故事守护者。</p><button class="primary-button story-button">继续她的故事 <i class="ph ph-arrow-right"></i></button></article>
+        <article class="section-panel content-panel" data-panel="chronicles"><p class="eyebrow">CHRONICLES</p><h2>黑雪下的玫瑰</h2><p>循着十二封未寄出的信，进入莉莉丝尚未讲完的夜之编年史。</p></article>
+        <article class="section-panel content-panel" data-panel="portraits"><p class="eyebrow">PORTRAITS</p><h2>月下映像</h2><p>每幅肖像都保存着一次呼吸、一道视线，和一个只出现片刻的表情。</p></article>
+        <article class="section-panel content-panel" data-panel="wardrobe"><p class="eyebrow">WARDROBE</p><h2>黑蕾丝礼装室</h2><p>礼裙、项圈、银饰与蔷薇纹样，共同记录她在不同故事章节中的样貌。</p></article>
+        <article class="section-panel content-panel" data-panel="voice"><p class="eyebrow">VOICE LETTERS</p><h2>玻璃另一侧的低语</h2><p>建议在午夜后佩戴耳机。部分信笺会根据访问时间出现不同内容。</p></article>
+        <article class="section-panel content-panel" data-panel="timeline"><p class="eyebrow">TIMELINE</p><h2>被镜子记住的夜晚</h2><p>从第一场红月到如今，沿着时间线寻找莉莉丝留下的微小痕迹。</p></article>
+
+        <aside class="presence-card glass-panel"><p class="eyebrow">LIVING PRESENCE</p><h3>莉莉丝正在听雨。</h3><p>移动光标靠近镜面，她的目光、呼吸与发丝会轻微回应。</p><dl><div><dt>呼吸</dt><dd>缓慢</dd></div><div><dt>视线</dt><dd>追踪中</dd></div><div><dt>发丝</dt><dd>漂浮</dd></div><div><dt>魔镜</dt><dd>已苏醒</dd></div></dl></aside>
+
+        <div class="feature-grid">
+          <button class="feature-card"><span class="eyebrow">CHAPTER XII</span><strong>黑雪下的玫瑰</strong><small>继续未完成的故事</small><i class="ph ph-arrow-up-right"></i></button>
+          <button class="feature-card"><span class="eyebrow">PORTRAIT 028</span><strong>月下映像</strong><small>一幅新的动态肖像已经苏醒</small><i class="ph ph-arrow-up-right"></i></button>
+          <button class="feature-card"><span class="eyebrow">VOICE LETTER</span><strong>致玻璃外的你</strong><small>午夜后请戴上耳机</small><i class="ph ph-arrow-up-right"></i></button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
