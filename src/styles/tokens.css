@@ -1,0 +1,26 @@
+:root {
+  --color-bg: #0b0e12;
+  --color-surface: #12171d;
+  --color-surface-raised: #1a2027;
+  --color-text: #f0eee8;
+  --color-muted: #9ca6b0;
+  --color-faint: #5c6873;
+  --color-line: rgba(216, 224, 231, 0.16);
+  --color-accent: #bb7186;
+  --color-accent-strong: #d88ba2;
+  --color-wine: #4f2634;
+  --content-max: 1240px;
+  --reading-max: 720px;
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 5rem;
+  --space-8: 8rem;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --font-display: Georgia, 'Noto Serif SC', 'Songti SC', serif;
+  --font-body: Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+}
