@@ -13,12 +13,20 @@ const baseSchema = z.object({
 });
 
 const publicCollection = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './content/public' }),
+  loader: glob({
+    pattern: '**/*.md',
+    base: './content/public',
+    generateId: ({ entry }) => `public/${entry}`
+  }),
   schema: baseSchema.extend({ visibility: z.literal('public') })
 });
 
 const privateCollection = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './content/private' }),
+  loader: glob({
+    pattern: '**/*.md',
+    base: './content/private',
+    generateId: ({ entry }) => `private/${entry}`
+  }),
   schema: baseSchema.extend({ visibility: z.literal('private') })
 });
 
