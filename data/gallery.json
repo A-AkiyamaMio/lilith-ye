@@ -1,0 +1,26 @@
+[
+  {
+    "id": "gallery-01",
+    "title": "未命名的入口",
+    "caption": "一束被雾面玻璃截断的光。",
+    "src": "/assets/gallery/gallery-01.webp",
+    "alt": "冷色玻璃与暗红光线构成的抽象画面",
+    "visibility": "public"
+  },
+  {
+    "id": "gallery-02",
+    "title": "静默回声",
+    "caption": "颜色在表面之下缓慢移动。",
+    "src": "/assets/gallery/gallery-02.webp",
+    "alt": "深石墨背景上的蓝灰纹理与细微玫瑰色线条",
+    "visibility": "public"
+  },
+  {
+    "id": "gallery-03",
+    "title": "边界练习",
+    "caption": "一条线把观看分成两种时间。",
+    "src": "/assets/gallery/gallery-03.webp",
+    "alt": "极简建筑结构与暗红色边界线的抽象图像",
+    "visibility": "public"
+  }
+]
