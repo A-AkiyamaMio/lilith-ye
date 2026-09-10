@@ -1,0 +1,26 @@
+---
+import '../styles/global.css';
+import '../styles/framework.css';
+import SiteNav from '../components/SiteNav.astro';
+import PageTransition from '../components/PageTransition.astro';
+import AmbientField from '../components/AmbientField.astro';
+const { title, active = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#f7f3ef" />
+    <meta name="description" content="Lilith 的现代角色展览与私人档案馆。" />
+    <title>{title} · Lilith</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <div class="site-shell"><AmbientField /><SiteNav active={active} /><main id="main"><slot /></main><PageTransition /></div>
+    <script>
+      import { initMotion } from '../lib/motion';
+      initMotion();
+    </script>
+  </body>
+</html>

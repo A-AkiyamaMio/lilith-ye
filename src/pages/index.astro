@@ -1,0 +1,14 @@
+---
+import PublicLayout from '../layouts/PublicLayout.astro';
+import Reveal from '../components/Reveal.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+---
+<PublicLayout title="展览入口" active="/">
+  <div class="site-width">
+    <section class="hero">
+      <div class="hero-copy" data-reveal="pending"><p class="eyebrow">MODERN LILITH / 01</p><h1 class="display">Lilith</h1><p class="lede">她把一枚浅蓝色的星留在胸前，把暗红色的目光藏进日常。这里是莉莉丝的公开展览入口。</p><div class="button-row"><a class="button primary" href="/lilith">认识她 <span aria-hidden="true">↗</span></a><a class="button ghost" href="/gallery">进入画廊</a></div></div>
+      <div class="hero-visual" data-reveal="pending"><div class="visual-note"><strong>主视觉位置暂留</strong><span>图片确认后替换</span></div></div>
+    </section>
+    <section class="section"><SectionHeading eyebrow="THE CHARACTER" title="清纯只是第一层" summary="她可以穿白T和百褶裙，也可以在镜子里留下另一种目光。" /><div class="card-grid"><Reveal><article class="info-card"><p class="eyebrow">01 / PRESENCE</p><h3>安静地被看见</h3><p>她不依靠夸张符号建立存在感，眼神、比例和一点暗红色就足够让人记住。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">02 / OBJECT</p><h3>五角星吊坠</h3><p>一枚浅蓝白色的玻璃碎片，被细金属线缠住，像从某个秘密里留下的证物。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">03 / DISTANCE</p><h3>靠近，但别替她命名</h3><p>公开展览给出足够线索，完整故事仍然留在受邀档案馆内。</p></article></Reveal></div></section>
+  </div>
+</PublicLayout>
