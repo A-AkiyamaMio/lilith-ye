@@ -9,7 +9,7 @@
 
 ## 已完成检查
 
-- `pnpm test`：17/17 通过。
+- `pnpm test`：18/18 通过。
 - `ASTRO_TELEMETRY_DISABLED=1 pnpm run build`：10 个静态页面构建成功。
 - 构建产物边界：公开 HTML 未发现提示词全文、登录接口、D1 配置或私密媒体路径；档案 HTML 共 6 个，全部由统一布局输出 `noindex,nofollow`。
 - 资源：角色默认/备用状态图、人物参考图和吊坠参考图已压缩到公开站可接受的体积；所有公开资源都有明确 `alt` 文本。

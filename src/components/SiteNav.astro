@@ -6,6 +6,5 @@ const { active = '' } = Astro.props;
   <a class="brand" href="/" aria-label="返回莉莉丝展览首页">LILITH <small>velvet mirror</small></a>
   <div class="site-nav-links">
     {navigation.map((item) => <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>{item.label}</a>)}
-    <a href="/archive">档案馆</a>
   </div>
 </nav>

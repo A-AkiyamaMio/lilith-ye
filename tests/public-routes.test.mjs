@@ -12,6 +12,7 @@ const publicSourceRoutes = [
   'src/pages/gallery.astro',
   'src/pages/world.astro'
 ];
+const publicNavigation = 'src/components/SiteNav.astro';
 const routes = [
   ['index.html', 'Lilith'],
   ['lilith/index.html', 'Lilith'],
@@ -37,6 +38,11 @@ test('public page sources expose canonical signatures without importing archive 
   assert.match(source, /五角星吊坠/);
   assert.match(source, /lilithPublicProfile/);
   assert.doesNotMatch(source, /lilithArchiveProfile|提示词全文|content\/private/);
+});
+
+test('public navigation does not expose the private archive entry point', () => {
+  const source = fs.readFileSync(path.join(root, publicNavigation), 'utf8');
+  assert.doesNotMatch(source, /href=["']\/archive["']/);
 });
 
 test('public output exposes no private collection content', () => {
