@@ -2,8 +2,8 @@
 import PublicLayout from '../layouts/PublicLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Reveal from '../components/Reveal.astro';
-import gallery from '../../data/gallery.json';
+import { lilithGalleryItems } from '../data/lilith';
 ---
 <PublicLayout title="画廊" active="/gallery">
-  <div class="site-width"><section class="section" style="padding-top:5rem;"><SectionHeading eyebrow="PUBLIC GALLERY" title="看见她留下的光" summary="图片素材暂留位置，等你确认最终视觉后接入。" /><div class="gallery-grid">{gallery.map((item, index) => <Reveal><article class="gallery-item" data-gallery-item={index}><div class="gallery-item-content"><h3>{item.title}</h3><p>{item.caption}</p></div></article></Reveal>)}</div></section></div>
+  <div class="site-width"><section class="section" style="padding-top:5rem;"><SectionHeading eyebrow="PUBLIC GALLERY" title="看见她留下的光" summary="公开展览只保留足够认出她的线索，完整设定留在受邀档案馆。" /><div class="gallery-grid">{lilithGalleryItems.map((item, index) => <Reveal><article class="gallery-item" data-gallery-item={index}><img src={item.src} alt={item.alt} /><div class="gallery-item-content"><p class="eyebrow">0{index + 1} / LILITH</p><h3>{item.title}</h3><p>{item.caption}</p></div></article></Reveal>)}</div></section></div>
 </PublicLayout>

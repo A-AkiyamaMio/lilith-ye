@@ -2,7 +2,8 @@
 import PublicLayout from '../layouts/PublicLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Reveal from '../components/Reveal.astro';
+import { lilithPublicProfile } from '../data/lilith';
 ---
 <PublicLayout title="世界" active="/world">
-  <div class="site-width"><section class="section" style="padding-top:5rem;"><p class="eyebrow">WORLD / OBSERVATION</p><h1 class="page-title">现代生活里<br />也有暗门。</h1><p class="lede" style="margin-top:2rem;">这个世界不靠宏大的地图成立。它由房间、窗光、沉默和被反复确认的边界组成。</p></section><section class="section"><SectionHeading eyebrow="THEMES" title="三个主题" summary="每一个主题都可以从日常物件开始。" /><div class="card-grid"><Reveal><article class="info-card"><p class="eyebrow">01</p><h3>名字</h3><p>名字不是标签，而是一扇门。它让某种存在被看见，也决定了被看见的方式。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">02</p><h3>观看</h3><p>观看从来不是单向的。进入展厅的人，也会被空间和自己的期待反过来观察。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">03</p><h3>边界</h3><p>边界不是拒绝靠近，而是让靠近变得清楚。私人档案以明确邀请和访问控制为前提。</p></article></Reveal></div></section></div>
+  <div class="site-width"><section class="section" style="padding-top:5rem;"><p class="eyebrow">WORLD / OBSERVATION</p><h1 class="page-title">现代生活里<br />也有暗门。</h1><p class="lede" style="margin-top:2rem;">这个世界不靠宏大的地图成立。它由房间、窗光、沉默和被反复确认的边界组成。莉莉丝只是其中最清晰的一道目光。</p></section><section class="section"><SectionHeading eyebrow="THEMES" title="三个主题" summary="每一个主题都可以从日常物件开始。" /><div class="card-grid"><Reveal><article class="info-card"><p class="eyebrow">01</p><h3>名字</h3><p>{lilithPublicProfile.name} 不是标签，而是一扇门。它让某种存在被看见，也决定了被看见的方式。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">02</p><h3>观看</h3><p>暗红虹膜内圈不是装饰，而是观看关系的提醒：进入展厅的人，也会被空间和自己的期待反过来观察。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">03</p><h3>边界</h3><p>边界不是拒绝靠近，而是让靠近变得清楚。更深一层的档案以明确邀请和访问控制为前提。</p></article></Reveal></div></section></div>
 </PublicLayout>

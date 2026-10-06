@@ -1,8 +1,15 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import VisualPlaceholder from '../components/VisualPlaceholder.astro';
+import Reveal from '../components/Reveal.astro';
+import { lilithPublicProfile } from '../data/lilith';
 ---
 <PublicLayout title="Lilith" active="/lilith">
-  <div class="site-width"><section class="section" style="padding-top: 5rem;"><div class="hero" style="padding-top:0;"><div><p class="eyebrow">CHARACTER NOTE / LILITH</p><h1 class="page-title">她把光<br />留在眼睛里。</h1><div class="prose" style="margin-top:2rem;"><p>Lilith 是一个年轻的成年女性。她清纯、漂亮、安静，却并不透明。她更习惯观察，再决定要不要回应。</p><p>现代衣服让她看起来容易靠近；暗红色的虹膜内圈、浅蓝五角星吊坠，以及偶尔偏开的视线，提醒你她从来不只是一个普通的短剧女主。</p></div></div><VisualPlaceholder label="人物肖像位置暂留" /></div></section><section class="section"><SectionHeading eyebrow="SIGNATURES" title="三个记忆点" summary="足够轻，能进入日常；足够准，一眼能认出她。" /><div class="card-grid"><article class="info-card"><p class="eyebrow">EYES</p><h3>暗红虹膜内圈</h3><p>不做夸张发光，只在近距离和侧光里显现。</p></article><article class="info-card"><p class="eyebrow">OBJECT</p><h3>浅蓝五角星</h3><p>原始形状和手工缠线保持不变，只让它更细小、更闪亮。</p></article><article class="info-card"><p class="eyebrow">HAIR</p><h3>高马尾空气刘海</h3><p>让她更高挑、更清爽，也为现代服装留下轻盈的轮廓。</p></article></div></section></div>
+  <div class="site-width">
+    <section class="section character-intro" style="padding-top: 5rem;">
+      <div class="character-copy"><p class="eyebrow">CHARACTER NOTE / LILITH</p><h1 class="page-title">她把光<br />留在眼睛里。</h1><div class="prose" style="margin-top:2rem;"><p>Lilith 是一个年轻的成年女性。她清纯、漂亮、安静，却并不透明。她更习惯观察，再决定要不要回应。</p><p>现代衣服让她看起来容易靠近；暗红色的虹膜内圈、浅蓝五角星吊坠，以及偶尔偏开的视线，提醒你她从来不只是一个普通的短剧女主。</p></div><div class="character-stats"><span><strong>{lilithPublicProfile.age}</strong> 岁 / 成人设定</span><span><strong>{lilithPublicProfile.heightCm}</strong> cm / 高挑比例</span></div></div><div class="portrait-frame" data-reveal="pending"><img src={lilithPublicProfile.visual.portrait} alt="莉莉丝日常肖像，柔黑发丝与清透肤色" /></div>
+    </section>
+    <section class="section"><SectionHeading eyebrow="SIGNATURES" title="三个记忆点" summary="足够轻，能进入日常；足够准，一眼能认出她。" /><div class="card-grid">{lilithPublicProfile.signatures.map((signature, index) => <Reveal><article class="info-card"><p class="eyebrow">0{index + 1}</p><h3>{['暗红虹膜内圈', '浅蓝五角星', '现代状态'][index]}</h3><p>{signature}</p></article></Reveal>)}</div></section>
+    <section class="section"><SectionHeading eyebrow="STATES" title="同一个人，两种靠近方式" summary="服装和发型可以变化，脸、比例与那一点危险的目光不变。" /><div class="state-grid">{lilithPublicProfile.states.map((state) => <article class="state-card"><div class="state-image"><img src={state.image} alt={`莉莉丝${state.name}状态`} /></div><div><p class="eyebrow">{state.id === 'high-ponytail' ? 'STATE A' : 'STATE B'}</p><h3>{state.name}</h3><p>{state.description}</p></div></article>)}</div></section>
+  </div>
 </PublicLayout>

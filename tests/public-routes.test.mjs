@@ -6,6 +6,12 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const dist = path.join(root, 'dist');
+const publicSourceRoutes = [
+  'src/pages/index.astro',
+  'src/pages/lilith.astro',
+  'src/pages/gallery.astro',
+  'src/pages/world.astro'
+];
 const routes = [
   ['index.html', 'Lilith'],
   ['lilith/index.html', 'Lilith'],
@@ -21,6 +27,16 @@ test('production build contains every public exhibition route', () => {
     assert.match(html, new RegExp(`<title>[^<]*${titleFragment}`));
     assert.doesNotMatch(html, /Supabase 尚未配置|preview=archive|type="password"/i);
   }
+});
+
+test('public page sources expose canonical signatures without importing archive data', () => {
+  const source = publicSourceRoutes.map((relativePath) => fs.readFileSync(path.join(root, relativePath), 'utf8')).join('\n');
+
+  assert.match(source, /莉莉丝/);
+  assert.match(source, /暗红虹膜内圈/);
+  assert.match(source, /五角星吊坠/);
+  assert.match(source, /lilithPublicProfile/);
+  assert.doesNotMatch(source, /lilithArchiveProfile|提示词全文|content\/private/);
 });
 
 test('public output exposes no private collection content', () => {
