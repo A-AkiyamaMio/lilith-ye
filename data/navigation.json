@@ -1,0 +1,6 @@
+[
+  { "label": "展览", "href": "/" },
+  { "label": "Lilith", "href": "/lilith" },
+  { "label": "世界", "href": "/world" },
+  { "label": "画廊", "href": "/gallery" }
+]

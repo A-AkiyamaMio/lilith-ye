@@ -1,0 +1,17 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile, lilithPublicProfile } from '../../data/lilith';
+const cards = [
+  ['人物档案', '/archive/profile', '身份、脸部、眼睛与身体比例。'],
+  ['外观与状态', '/archive/appearance', '高马尾、披发、服装和不可漂移的细节。'],
+  ['资产记录', '/archive/assets', '人物母图、吊坠层和参考资产的职责。'],
+  ['提示词入口', '/archive/prompts', '一致性入口、合成顺序和负面边界。'],
+  ['修订记录', '/archive/revisions', '冻结节点与每次定稿的原因。'],
+];
+---
+<ArchiveLayout title="档案总览" active="/archive">
+  <p class="eyebrow">CHARACTER CONTROL CENTER / PRIVATE</p>
+  <h1>莉莉丝档案馆</h1>
+  <div class="prose"><p>这里保存完整的人物设定和生成控制规则。公开展览只提供线索；这一层负责保持她在不同场景里仍然是同一个人。</p><p>当前版本：{lilithArchiveProfile.promptEntry.version}。核心状态：{lilithPublicProfile.states.map((state) => state.name).join(' / ')}。</p></div>
+  <div class="archive-card-grid">{cards.map(([label, href, description]) => <a class="archive-card" href={href}><h2>{label} <span aria-hidden="true">↗</span></h2><p>{description}</p></a>)}</div>
+</ArchiveLayout>

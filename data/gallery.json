@@ -1,0 +1,26 @@
+[
+  {
+    "id": "portrait-reference",
+    "title": "日常目光",
+    "caption": "她看起来很容易靠近，但暗红色的内圈提醒你，她始终在观察。",
+    "src": "/assets/lilith/portrait-reference.jpg",
+    "alt": "莉莉丝高马尾与浅色服装的日常肖像参考",
+    "visibility": "public"
+  },
+  {
+    "id": "pendant-reference",
+    "title": "浅蓝五角星",
+    "caption": "一枚被细银丝留下的、明亮而精致的私人标记。",
+    "src": "/assets/lilith/pendant-reference.jpg",
+    "alt": "莉莉丝半透明浅蓝五角星吊坠与银丝结构参考",
+    "visibility": "public"
+  },
+  {
+    "id": "hero-atmosphere",
+    "title": "暗色回声",
+    "caption": "她的危险感不靠夸张符号，只藏在光线和距离里。",
+    "src": "/assets/lilith/state-default.jpg",
+    "alt": "莉莉丝暗色展览氛围肖像",
+    "visibility": "public"
+  }
+]

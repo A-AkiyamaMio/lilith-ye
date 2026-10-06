@@ -1,0 +1,9 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile } from '../../data/lilith';
+---
+<ArchiveLayout title="人物档案" active="/archive/profile">
+  <p class="eyebrow">DOSSIER / IDENTITY</p><h1>她是谁</h1>
+  <div class="archive-stat-grid"><div><span>年龄</span><strong>{lilithArchiveProfile.identity.age} 岁</strong></div><div><span>身高</span><strong>{lilithArchiveProfile.identity.heightCm} cm</strong></div><div><span>头身比</span><strong>{lilithArchiveProfile.identity.headToBodyRatio}</strong></div></div>
+  <div class="archive-card-grid"><article class="archive-card"><h2>身体标准</h2><p>{lilithArchiveProfile.identity.body}</p></article><article class="archive-card"><h2>脸部与皮肤</h2><p>{lilithArchiveProfile.face.shape}</p><p>{lilithArchiveProfile.face.eyes}</p><p>{lilithArchiveProfile.face.skin}</p><p>{lilithArchiveProfile.face.makeup}</p></article><article class="archive-card"><h2>眼睛</h2><p>{lilithArchiveProfile.face.iris}</p></article></div>
+</ArchiveLayout>

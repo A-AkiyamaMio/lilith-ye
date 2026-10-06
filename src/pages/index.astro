@@ -1,0 +1,21 @@
+---
+import PublicLayout from '../layouts/PublicLayout.astro';
+import Reveal from '../components/Reveal.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { lilithPublicProfile } from '../data/lilith';
+---
+<PublicLayout title="展览入口" active="/">
+  <div class="site-width">
+    <section class="hero">
+      <div class="hero-copy" data-reveal="pending">
+        <p class="eyebrow">MODERN LILITH / 01</p>
+        <h1 class="display">Lilith</h1>
+        <p class="lede">{lilithPublicProfile.summary} 她把一枚浅蓝色的星留在胸前，把暗红色的目光藏进日常。</p>
+        <div class="button-row"><a class="button primary" href="/lilith">认识她 <span aria-hidden="true">↗</span></a><a class="button ghost" href="/gallery">进入画廊</a></div>
+        <div class="hero-facts" aria-label="莉莉丝公开资料"><span>{lilithPublicProfile.age} 岁 · 成年角色</span><span>{lilithPublicProfile.heightCm} cm</span><span>高马尾 / 披发</span></div>
+      </div>
+      <div class="hero-visual" data-reveal="pending"><img src={lilithPublicProfile.visual.hero} alt="莉莉丝默认高马尾与现代服装状态" /><div class="visual-note"><strong>公开角色主视觉</strong><span>状态 A / 默认高马尾</span></div></div>
+    </section>
+    <section class="section"><SectionHeading eyebrow="THE CHARACTER" title="清纯只是第一层" summary="她可以穿白 T 和百褶裙，也可以在镜子里留下另一种目光。" /><div class="card-grid">{lilithPublicProfile.signatures.map((signature, index) => <Reveal><article class="info-card"><p class="eyebrow">0{index + 1} / SIGNATURE</p><h3>{['安静地被看见', '五角星吊坠', '现代日常'][index]}</h3><p>{signature}</p></article></Reveal>)}</div></section>
+  </div>
+</PublicLayout>

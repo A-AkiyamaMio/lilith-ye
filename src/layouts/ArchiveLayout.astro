@@ -1,0 +1,25 @@
+---
+import '../styles/global.css';
+import '../styles/framework.css';
+import SiteNav from '../components/SiteNav.astro';
+import PageTransition from '../components/PageTransition.astro';
+const { title, active = '/archive' } = Astro.props;
+const links = [
+  ['总览', '/archive'], ['人物档案', '/archive/profile'], ['外观与状态', '/archive/appearance'],
+  ['资产记录', '/archive/assets'], ['提示词入口', '/archive/prompts'], ['修订记录', '/archive/revisions']
+];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width" /><meta name="robots" content="noindex,nofollow" /><title>{title} · Lilith Archive</title></head>
+  <body class="archive-shell">
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <SiteNav active={active} />
+    <div class="archive-layout">
+      <aside class="archive-sidebar"><p class="eyebrow">PRIVATE ARCHIVE</p><nav aria-label="档案导航">{links.map(([label, href]) => <a href={href} aria-current={active === href ? 'page' : undefined}>{label}</a>)}</nav></aside>
+      <main id="main" class="archive-main"><slot /></main>
+    </div>
+    <PageTransition />
+    <script>import { initMotion } from '../lib/motion'; initMotion();</script>
+  </body>
+</html>

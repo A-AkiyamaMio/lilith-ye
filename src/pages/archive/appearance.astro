@@ -1,0 +1,8 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile } from '../../data/lilith';
+---
+<ArchiveLayout title="外观与状态" active="/archive/appearance">
+  <p class="eyebrow">DOSSIER / APPEARANCE</p><h1>外观与状态</h1>
+  <div class="archive-card-grid"><article class="archive-card"><h2>发型</h2><p><strong>发色：</strong>{lilithArchiveProfile.hair.color}</p><p><strong>刘海：</strong>{lilithArchiveProfile.hair.bangs}</p><p><strong>默认：</strong>{lilithArchiveProfile.hair.default}</p><p><strong>备用：</strong>{lilithArchiveProfile.hair.alternate}</p><p><strong>禁止：</strong>{lilithArchiveProfile.hair.forbidden}</p></article><article class="archive-card"><h2>吊坠</h2><p><strong>材质：</strong>{lilithArchiveProfile.pendant.material}</p><p><strong>形状：</strong>{lilithArchiveProfile.pendant.shape}</p><p><strong>尺寸：</strong>{lilithArchiveProfile.pendant.size}</p><p><strong>连接：</strong>{lilithArchiveProfile.pendant.connection}</p><p><strong>佩戴：</strong>{lilithArchiveProfile.pendant.placement}</p></article><article class="archive-card"><h2>服装状态</h2><p><strong>默认：</strong>{lilithArchiveProfile.outfits.default}</p><p><strong>备用：</strong>{lilithArchiveProfile.outfits.alternate}</p></article></div>
+</ArchiveLayout>

@@ -1,0 +1,8 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile } from '../../data/lilith';
+---
+<ArchiveLayout title="修订记录" active="/archive/revisions">
+  <p class="eyebrow">REVISION LOG / FROZEN NODES</p><h1>她如何变得稳定</h1>
+  <div class="timeline">{lilithArchiveProfile.revisions.map((revision) => <article class="timeline-item"><time datetime={revision.date}>{revision.date}</time><div><h3>{revision.title} <span class="revision-status">{revision.status}</span></h3><p>{revision.summary}</p></div></article>)}</div>
+</ArchiveLayout>
