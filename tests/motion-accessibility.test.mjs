@@ -10,9 +10,10 @@ function read(relativePath) {
 
 test('visual foundation exposes the approved gallery tokens', () => {
   const tokens = read('src/styles/tokens.css');
-  assert.match(tokens, /--color-bg/);
-  assert.match(tokens, /--color-text/);
-  assert.match(tokens, /--color-accent/);
+  assert.match(tokens, /--paper/);
+  assert.match(tokens, /--ink/);
+  assert.match(tokens, /--wine/);
+  assert.match(tokens, /--ice/);
   assert.match(tokens, /--content-max/);
 });
 

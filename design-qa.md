@@ -1,40 +1,24 @@
 # Design QA
 
-- Source visual truth: `C:\Users\Administrator\Documents\Codex\2026-07-05\new-chat\outputs\lilith-velvet-mirror-concept.png`
-- Implementation screenshot: `C:\Users\Administrator\Documents\Codex\2026-07-05\new-chat\work\lilith-ye\qa-implementation-login.png`
-- Additional state: `qa-implementation-archive.png`
-- Viewport: 1440 × 1024 desktop; 390 × 844 responsive spot check
-- State: login resting state; archive authenticated preview state
+## 本次同步范围
 
-## Full-view comparison evidence
+- 来源：私人 Wiki Sites 版本 `c194af3` 的莉莉丝设定、最终状态图和吊坠参考图。
+- 目标：Astro 公开展览 + `/archive` 私密档案结构。
+- 公开路由：`/`、`/lilith`、`/gallery`、`/world`。
+- 档案路由：`/archive`、`/archive/profile`、`/archive/appearance`、`/archive/assets`、`/archive/prompts`、`/archive/revisions`。
 
-The source and implementation were inspected together at the same desktop viewport. Both use the same Lilith artwork, left-dominant mirror composition, narrow right authentication panel, near-black/oxblood palette, high-contrast serif wordmark, monospaced micro-labels, restrained crimson focus treatment, and a single dominant CTA.
+## 已完成检查
 
-## Focused region comparison evidence
+- `pnpm test`：17/17 通过。
+- `ASTRO_TELEMETRY_DISABLED=1 pnpm run build`：10 个静态页面构建成功。
+- 构建产物边界：公开 HTML 未发现提示词全文、登录接口、D1 配置或私密媒体路径；档案 HTML 共 6 个，全部由统一布局输出 `noindex,nofollow`。
+- 资源：角色默认/备用状态图、人物参考图和吊坠参考图已压缩到公开站可接受的体积；所有公开资源都有明确 `alt` 文本。
+- 动效：保留入场 reveal、画廊悬停和页面转场；`prefers-reduced-motion` 路径仍然立即显示内容，不依赖音频。
+- 响应式：保留目标站原有移动端单列、档案导航横向滚动和无横向溢出规则；人物状态卡在窄屏切换为单列。
+- 键盘：沿用全局 `:focus-visible`、skip link 和语义链接结构。
 
-The authentication panel was checked separately through the rendered browser capture. Form spacing, control height, label hierarchy, focus affordances, tab state, and CTA contrast remain legible. No separate crop was needed because the 1440 × 1024 capture renders the panel text and controls clearly enough for inspection.
+## 发布闸门
 
-## Required fidelity surfaces
-
-- Fonts and typography: Playfair Display, Geist and Geist Mono preserve the intended display/body/caption hierarchy. Optical weights, letter spacing and line lengths are appropriate.
-- Spacing and layout rhythm: split composition, panel width, field spacing, CTA sizing and archive grid are consistent and responsive. Mobile has no horizontal overflow.
-- Colors and visual tokens: near-black surfaces, muted mauve copy, crimson borders and glow map closely to the source.
-- Image quality and asset fidelity: the original selected high-resolution Lilith artwork is used directly with intentional crop and darkening. No placeholder art replaces visible assets.
-- Copy and content: Chinese product copy is concise and character-specific; labels remain recognizable and functional.
-
-## Findings
-
-No actionable P0/P1/P2 visual findings remain.
-
-## Patches made
-
-- Fixed the Supabase global-name collision that blocked authentication initialization.
-- Added a localhost-only archive preview route for authenticated-state QA.
-- Verified register/login tab switching, unconfigured-auth feedback, archive navigation, desktop animation completion, and mobile width behavior.
-
-## Follow-up polish
-
-- [P3] Once Supabase is configured, the setup warning disappears and the footer can return to purely atmospheric copy.
-- [P3] Additional archive content imagery can be introduced as future character chapters are authored.
-
-final result: passed
+- 代码与静态构建已准备好。
+- `/archive/*` 的 Cloudflare Access 保护规则无法从当前仓库和本地构建环境确认；在规则确认前不合入 `main`，避免私密档案页面被公开访问。
+- 当前分支：`redesign/lilith-gallery`。等待 Access 确认后，再合并到 `main`、推送 GitHub 并检查 Cloudflare Pages 部署。
