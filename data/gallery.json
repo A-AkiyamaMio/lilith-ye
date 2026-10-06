@@ -1,26 +1,26 @@
 [
   {
-    "id": "gallery-01",
-    "title": "未命名的入口",
-    "caption": "一束被雾面玻璃截断的光。",
-    "src": "/assets/gallery/gallery-01.webp",
-    "alt": "冷色玻璃与暗红光线构成的抽象画面",
+    "id": "portrait-reference",
+    "title": "日常目光",
+    "caption": "她看起来很容易靠近，但暗红色的内圈提醒你，她始终在观察。",
+    "src": "/assets/lilith/portrait-reference.jpg",
+    "alt": "莉莉丝高马尾与浅色服装的日常肖像参考",
     "visibility": "public"
   },
   {
-    "id": "gallery-02",
-    "title": "静默回声",
-    "caption": "颜色在表面之下缓慢移动。",
-    "src": "/assets/gallery/gallery-02.webp",
-    "alt": "深石墨背景上的蓝灰纹理与细微玫瑰色线条",
+    "id": "pendant-reference",
+    "title": "浅蓝五角星",
+    "caption": "一枚被细银丝留下的、明亮而精致的私人标记。",
+    "src": "/assets/lilith/pendant-reference.jpg",
+    "alt": "莉莉丝半透明浅蓝五角星吊坠与银丝结构参考",
     "visibility": "public"
   },
   {
-    "id": "gallery-03",
-    "title": "边界练习",
-    "caption": "一条线把观看分成两种时间。",
-    "src": "/assets/gallery/gallery-03.webp",
-    "alt": "极简建筑结构与暗红色边界线的抽象图像",
+    "id": "hero-atmosphere",
+    "title": "暗色回声",
+    "caption": "她的危险感不靠夸张符号，只藏在光线和距离里。",
+    "src": "/assets/lilith/hero.webp",
+    "alt": "莉莉丝暗色展览氛围肖像",
     "visibility": "public"
   }
 ]

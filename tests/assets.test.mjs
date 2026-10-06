@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 test('gallery metadata points only to optimized public assets', () => {
   const gallery = JSON.parse(fs.readFileSync(path.join(root, 'data/gallery.json'), 'utf8'));
   for (const item of gallery) {
-    assert.match(item.src, /^\/assets\/gallery\/gallery-\d+\.webp$/);
+    assert.match(item.src, /^\/assets\/(?:gallery\/gallery-\d+\.webp|lilith\/(?:hero\.webp|portrait-reference\.jpg|pendant-reference\.jpg))$/);
     assert.ok(fs.existsSync(path.join(root, 'public', item.src.slice(1))), item.src);
     assert.ok(item.alt.length > 0);
   }
