@@ -14,4 +14,5 @@ test('site exposes the content-driven build contract', () => {
   assert.ok(fs.existsSync(new URL('src/', root)));
   assert.ok(fs.existsSync(new URL('content/', root)));
   assert.ok(fs.existsSync(new URL('data/', root)));
+  assert.ok(fs.existsSync(new URL('src/pages/archive/', root)));
 });

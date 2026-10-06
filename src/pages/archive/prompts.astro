@@ -1,0 +1,9 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile } from '../../data/lilith';
+---
+<ArchiveLayout title="提示词入口" active="/archive/prompts">
+  <p class="eyebrow">PROMPT ARCHIVE / {lilithArchiveProfile.promptEntry.version.toUpperCase()}</p><h1>一致性工作台</h1>
+  <div class="prose"><p>顺序固定：先锁定身份，再处理项链，最后加入服装、姿势、场景和表情变量。</p></div>
+  <div class="archive-card-grid"><article class="archive-card"><h2>核心入口</h2><p>{lilithArchiveProfile.promptEntry.core}</p></article><article class="archive-card"><h2>项链合成</h2><p>{lilithArchiveProfile.promptEntry.compositing}</p></article><article class="archive-card"><h2>参考顺序</h2><p>{lilithArchiveProfile.promptEntry.referenceOrder.join(' → ')}</p></article><article class="archive-card"><h2>默认负面边界</h2><p class="prompt-text">{lilithArchiveProfile.promptEntry.negative}</p></article></div>
+</ArchiveLayout>

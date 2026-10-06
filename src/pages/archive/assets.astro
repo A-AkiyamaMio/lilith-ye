@@ -1,0 +1,16 @@
+---
+import ArchiveLayout from '../../layouts/ArchiveLayout.astro';
+import { lilithArchiveProfile } from '../../data/lilith';
+const assets = [
+  ['人物本体一致性母图', '锁定脸、发型、身体和服装，不负责项链结构。'],
+  ['脸部与发型母图', '只继承脸、刘海、发质和高马尾/披发状态。'],
+  ['Body Ver.3', '锁定 169cm、头身比和身体纵向比例。'],
+  ['项链结构母图', lilithArchiveProfile.pendant.handling],
+  ['自然微犬牙参考', '只锁定犬牙比例，不覆盖脸部母图。'],
+];
+---
+<ArchiveLayout title="资产记录" active="/archive/assets">
+  <p class="eyebrow">ASSET ARCHIVE / LAYERS</p><h1>资产职责</h1>
+  <div class="prose"><p>人物本体、服装和项链不互相继承未经授权的细节。原始视觉文件仍由源站作为控制中心保存；这里记录每一层该负责什么。</p></div>
+  <div class="archive-card-grid">{assets.map(([title, description]) => <article class="archive-card"><h2>{title}</h2><p>{description}</p></article>)}</div>
+</ArchiveLayout>

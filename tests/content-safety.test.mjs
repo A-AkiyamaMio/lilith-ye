@@ -14,6 +14,14 @@ const requiredFiles = [
   'content/private/timeline/index.md',
   'content/private/notes/index.md'
 ];
+const archiveRoutes = [
+  'src/pages/archive/index.astro',
+  'src/pages/archive/profile.astro',
+  'src/pages/archive/appearance.astro',
+  'src/pages/archive/assets.astro',
+  'src/pages/archive/prompts.astro',
+  'src/pages/archive/revisions.astro'
+];
 
 test('the first release content files exist in the correct visibility tree', () => {
   for (const relativePath of requiredFiles) {
@@ -40,5 +48,22 @@ test('published Markdown contains no secrets or unsafe source material', () => {
   for (const filePath of markdownFiles) {
     const text = fs.readFileSync(filePath, 'utf8');
     assert.doesNotMatch(text, forbidden, path.relative(contentRoot, filePath));
+  }
+});
+
+test('private archive routes are complete and explicitly non-indexable', () => {
+  for (const relativePath of archiveRoutes) {
+    assert.ok(fs.existsSync(new URL(relativePath, root)), relativePath);
+  }
+
+  const layout = fs.readFileSync(new URL('src/layouts/ArchiveLayout.astro', root), 'utf8');
+  assert.match(layout, /noindex,nofollow/);
+  assert.doesNotMatch(layout, /提示词全文/);
+});
+
+test('private archive media never uses an unprotected public asset path', () => {
+  for (const relativePath of archiveRoutes) {
+    const source = fs.readFileSync(new URL(relativePath, root), 'utf8');
+    assert.doesNotMatch(source, /src=["']\/assets\//, relativePath);
   }
 });
