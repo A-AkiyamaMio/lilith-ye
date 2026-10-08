@@ -11,6 +11,8 @@ npm run dev
 
 生产构建使用 `npm run build`，本地检查构建结果使用 `npm run preview`，测试使用 `npm test`。
 
+当前 Cloudflare Pages 项目直接发布仓库根目录。发布前运行 `pnpm run publish:root`，它会先构建 Astro，再把生产页面与静态资源同步到根目录发布镜像。
+
 ## 内容维护
 
 - `content/public/`：公开展览内容。
