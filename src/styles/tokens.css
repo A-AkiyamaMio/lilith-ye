@@ -1,15 +1,24 @@
 :root {
-  --ink: #171419;
-  --ink-soft: #4f4850;
-  --paper: #f7f3ef;
-  --paper-strong: #fffdfa;
-  --line: rgba(42, 27, 39, 0.14);
-  --wine: #8f284b;
-  --wine-dark: #4c172d;
-  --rose: #d48c9d;
-  --ice: #cfe4ec;
-  --shadow: 0 24px 70px rgba(52, 28, 43, 0.14);
-  --content-max: 1240px;
+  --void: #050407;
+  --void-soft: #0b0910;
+  --surface: #111018;
+  --surface-raised: #17151f;
+  --paper: #f2f4f5;
+  --paper-soft: #a9adb5;
+  --paper-dim: #6f737c;
+  --ink: #f2f4f5;
+  --ink-soft: #a9adb5;
+  --line: rgba(239, 245, 248, 0.14);
+  --line-strong: rgba(239, 245, 248, 0.28);
+  --blood: #a51f4a;
+  --blood-bright: #e14e7b;
+  --wine: #a51f4a;
+  --wine-dark: #5f1230;
+  --ice: #cdeaf4;
+  --ice-glow: #8ed9ee;
+  --shadow: 0 32px 100px rgba(0, 0, 0, 0.48);
+  --glow-shadow: 0 0 80px rgba(142, 217, 238, 0.14);
+  --content-max: 1380px;
   --reading-max: 720px;
   --space-1: 0.5rem;
   --space-2: 0.75rem;
@@ -19,8 +28,10 @@
   --space-6: 3rem;
   --space-7: 5rem;
   --space-8: 8rem;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --space-9: 12rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --font-display: Georgia, 'Noto Serif SC', 'Songti SC', serif;
+  --font-display: 'Times New Roman', 'Noto Serif SC', 'Songti SC', serif;
   --font-body: Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }

@@ -3,8 +3,16 @@ import navigation from '../../data/navigation.json';
 const { active = '' } = Astro.props;
 ---
 <nav class="site-nav" aria-label="主导航">
-  <a class="brand" href="/" aria-label="返回莉莉丝展览首页">LILITH <small>velvet mirror</small></a>
+  <a class="brand" href="/" aria-label="返回莉莉丝展览首页">
+    <span class="brand-mark">L</span>
+    <span>LILITH</span>
+    <small class="brand-meta">velvet mirror / 01</small>
+  </a>
   <div class="site-nav-links">
-    {navigation.map((item) => <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>{item.label}</a>)}
+    {navigation.map((item, index) => (
+      <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>
+        <span class="nav-index">0{index + 1}</span>{item.label}
+      </a>
+    ))}
   </div>
 </nav>

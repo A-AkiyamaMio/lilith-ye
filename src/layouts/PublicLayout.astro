@@ -4,6 +4,7 @@ import '../styles/framework.css';
 import SiteNav from '../components/SiteNav.astro';
 import PageTransition from '../components/PageTransition.astro';
 import AmbientField from '../components/AmbientField.astro';
+import CursorAura from '../components/CursorAura.astro';
 const { title, active = '' } = Astro.props;
 ---
 <!doctype html>
@@ -11,13 +12,19 @@ const { title, active = '' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#f7f3ef" />
-    <meta name="description" content="Lilith 的现代角色展览与私人档案馆。" />
+    <meta name="theme-color" content="#050407" />
+    <meta name="description" content="Lilith 的暗色动态角色展览：她的气质、状态与世界。" />
     <title>{title} · Lilith</title>
   </head>
-  <body>
+  <body data-page-root>
     <a class="skip-link" href="#main">跳到主要内容</a>
-    <div class="site-shell"><AmbientField /><SiteNav active={active} /><main id="main"><slot /></main><PageTransition /></div>
+    <CursorAura />
+    <div class="site-shell">
+      <AmbientField />
+      <SiteNav active={active} />
+      <main id="main"><slot /></main>
+      <PageTransition />
+    </div>
     <script>
       import { initMotion } from '../lib/motion';
       initMotion();

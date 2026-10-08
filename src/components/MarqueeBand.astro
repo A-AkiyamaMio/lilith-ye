@@ -1,0 +1,9 @@
+---
+const { items = ['LILITH', 'VELVET MIRROR', 'PRIVATE CONSTELLATION'] } = Astro.props;
+const repeated = [...items, ...items];
+---
+<div class="marquee-band" aria-label={items.join(' · ')}>
+  <div class="marquee-track">
+    {repeated.map((item) => <span>{item}<i aria-hidden="true">✦</i></span>)}
+  </div>
+</div>
