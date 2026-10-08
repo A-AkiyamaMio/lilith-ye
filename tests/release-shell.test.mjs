@@ -24,3 +24,14 @@ test('deployment headers protect the archive and harden all routes', () => {
   assert.match(headers, /X-Content-Type-Options:\s*nosniff/);
   assert.match(headers, /Permissions-Policy:/);
 });
+
+test('Pages Functions run only for archive protection and authentication APIs', () => {
+  const routes = JSON.parse(read('public/_routes.json'));
+  assert.equal(routes.version, 1);
+  assert.ok(routes.include.includes('/archive'));
+  assert.ok(routes.include.includes('/archive/*'));
+  assert.ok(routes.include.includes('/api/auth/*'));
+  for (const publicPath of ['/', '/lilith/*', '/gallery/*', '/world/*', '/_astro/*', '/assets/*']) {
+    assert.equal(routes.include.includes(publicPath), false);
+  }
+});
