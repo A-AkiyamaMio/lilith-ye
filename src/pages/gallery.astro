@@ -1,9 +1,60 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import Reveal from '../components/Reveal.astro';
-import { lilithGalleryItems } from '../data/lilith';
+import MarqueeBand from '../components/MarqueeBand.astro';
+import { lilithGalleryItems, lilithPublicProfile } from '../data/lilith';
+
+const studies = [
+  { src: lilithPublicProfile.visual.hero, label: 'DISTANCE', note: '远一点，先看轮廓。' },
+  { src: lilithPublicProfile.visual.pendant, label: 'SIGN', note: '近一点，才看见她留下的记号。' },
+];
 ---
 <PublicLayout title="画廊" active="/gallery">
-  <div class="site-width"><section class="section" style="padding-top:5rem;"><SectionHeading eyebrow="PUBLIC GALLERY" title="看见她留下的光" summary="公开展览只保留足够认出她的线索，完整设定留在受邀档案馆。" /><div class="gallery-grid">{lilithGalleryItems.map((item, index) => <Reveal><article class="gallery-item" data-gallery-item={index}><img src={item.src} alt={item.alt} /><div class="gallery-item-content"><p class="eyebrow">0{index + 1} / LILITH</p><h3>{item.title}</h3><p>{item.caption}</p></div></article></Reveal>)}</div></section></div>
+  <div class="site-width">
+    <section class="page-hero gallery-hero">
+      <span class="page-number" aria-hidden="true">02</span>
+      <div data-reveal="pending">
+        <p class="eyebrow">PUBLIC GALLERY / SELECTED WORKS</p>
+        <h1 class="page-title kinetic-title">看见她<br />留下的光。</h1>
+        <p class="lede">不是一套固定的姿态，而是她在不同距离、不同光线和不同沉默里的样子。</p>
+      </div>
+    </section>
+
+    <section class="section gallery-masonry" aria-label="莉莉丝精选画廊">
+      {lilithGalleryItems.map((item, index) => (
+        <figure class={`gallery-piece piece-${index + 1} spotlight-card`} data-tilt data-reveal="pending">
+          <img src={item.src} alt={item.alt} />
+          <figcaption>
+            <span>FRAME / 0{index + 1}</span>
+            <div><h2>{item.title}</h2><p>{item.caption}</p></div>
+          </figcaption>
+        </figure>
+      ))}
+    </section>
+  </div>
+
+  <MarqueeBand items={['EYES', 'HAIR', 'PENDANT', 'SILENCE', 'LIGHT', 'DISTANCE']} />
+
+  <div class="site-width">
+    <section class="section observation-study">
+      <header class="section-heading" data-reveal="pending">
+        <div><p class="eyebrow">OBSERVATION STUDY</p><h2>距离改变的，<br />只是你看见的部分。</h2></div>
+        <p>她没有在每张图里解释自己。画面只提供线索，剩下的要由观看者承担。</p>
+      </header>
+      <div class="study-grid">
+        {studies.map((study, index) => (
+          <article class="study-card" data-reveal="pending">
+            <div class="study-image"><img src={study.src} alt="莉莉丝视觉细节研究" /></div>
+            <span>0{index + 1} / {study.label}</span>
+            <p>{study.note}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section gallery-ending" data-reveal="pending">
+      <span>END OF PUBLIC SELECTION</span>
+      <h2>画面会结束，<br />注视不会。</h2>
+      <a class="button secondary" href="/world">进入她的世界</a>
+    </section>
+  </div>
 </PublicLayout>

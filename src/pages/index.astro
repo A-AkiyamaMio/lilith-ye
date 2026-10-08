@@ -1,21 +1,107 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
-import Reveal from '../components/Reveal.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import { lilithPublicProfile } from '../data/lilith';
+import MarqueeBand from '../components/MarqueeBand.astro';
+import { lilithGalleryItems, lilithPublicProfile } from '../data/lilith';
+
+const signatureTitles = ['藏在眼底的暗红', '被银丝留下的星', '能够走进日常的她'];
 ---
 <PublicLayout title="展览入口" active="/">
-  <div class="site-width">
-    <section class="hero">
-      <div class="hero-copy" data-reveal="pending">
-        <p class="eyebrow">MODERN LILITH / 01</p>
-        <h1 class="display">Lilith</h1>
-        <p class="lede">{lilithPublicProfile.summary} 她把一枚浅蓝色的星留在胸前，把暗红色的目光藏进日常。</p>
-        <div class="button-row"><a class="button primary" href="/lilith">认识她 <span aria-hidden="true">↗</span></a><a class="button ghost" href="/gallery">进入画廊</a></div>
-        <div class="hero-facts" aria-label="莉莉丝公开资料"><span>{lilithPublicProfile.age} 岁 · 成年角色</span><span>{lilithPublicProfile.heightCm} cm</span><span>高马尾 / 披发</span></div>
+  <section class="home-hero site-width" data-experience="hero">
+    <div class="hero-index" aria-hidden="true">01 — 04</div>
+    <div class="hero-title-wrap" data-reveal="pending">
+      <p class="eyebrow">A DIGITAL CHARACTER EXHIBITION</p>
+      <h1 class="home-title kinetic-title"><span>LILI</span><span>TH</span></h1>
+      <p class="hero-kicker">BEAUTIFUL <i>/</i> QUIET <i>/</i> DANGEROUS</p>
+    </div>
+
+    <figure class="hero-portrait spotlight-card" data-tilt data-reveal="pending">
+      <img src={lilithPublicProfile.visual.hero} alt="莉莉丝的现代日常形象" />
+      <figcaption>
+        <span>ENTITY / LILITH</span>
+        <span>STATE 01 / HIGH PONYTAIL</span>
+      </figcaption>
+    </figure>
+
+    <div class="hero-copy" data-reveal="pending">
+      <p>{lilithPublicProfile.summary}</p>
+      <p>她把浅蓝色的五角星吊坠留在胸前，把另一种目光藏进日常。</p>
+      <div class="button-row">
+        <a class="button" href="/lilith">认识莉莉丝</a>
+        <a class="button secondary" href="/gallery">进入画廊</a>
       </div>
-      <div class="hero-visual" data-reveal="pending"><img src={lilithPublicProfile.visual.hero} alt="莉莉丝默认高马尾与现代服装状态" /><div class="visual-note"><strong>公开角色主视觉</strong><span>状态 A / 默认高马尾</span></div></div>
+    </div>
+
+    <div class="hero-orbit" aria-hidden="true"><span>LOOK CLOSER</span></div>
+  </section>
+
+  <MarqueeBand items={['LILITH', 'VELVET MIRROR', 'ICE BLUE', 'DARK RED', 'TWO STATES', 'ONE PERSON']} />
+
+  <div class="site-width">
+    <section class="section manifesto" data-section="manifesto">
+      <p class="chapter-number" aria-hidden="true">02</p>
+      <div class="manifesto-copy" data-reveal="pending">
+        <p class="eyebrow">THE FIRST IMPRESSION</p>
+        <h2>清纯不是答案，<br /><em>只是她允许你先看到的那一层。</em></h2>
+      </div>
+      <div class="manifesto-note" data-reveal="pending">
+        <span>ABOUT HER</span>
+        <p>她不需要夸张的角、翅膀或符号来证明自己。真正危险的部分很轻：侧光里的一圈暗红，停留得稍久一点的视线，还有不肯被完全解释的沉默。</p>
+      </div>
     </section>
-    <section class="section"><SectionHeading eyebrow="THE CHARACTER" title="清纯只是第一层" summary="她可以穿白 T 和百褶裙，也可以在镜子里留下另一种目光。" /><div class="card-grid">{lilithPublicProfile.signatures.map((signature, index) => <Reveal><article class="info-card"><p class="eyebrow">0{index + 1} / SIGNATURE</p><h3>{['安静地被看见', '五角星吊坠', '现代日常'][index]}</h3><p>{signature}</p></article></Reveal>)}</div></section>
+
+    <section class="section" data-section="signatures">
+      <header class="section-heading" data-reveal="pending">
+        <div><p class="eyebrow">SIGNATURES / 03</p><h2>一眼认出她的<br />三个细节</h2></div>
+        <p>克制到足以存在于现实，准确到不会和任何人混淆。</p>
+      </header>
+      <div class="signature-grid">
+        {lilithPublicProfile.signatures.map((signature, index) => (
+          <article class="signature-card spotlight-card" data-tilt data-reveal="pending">
+            <span class="signature-index">0{index + 1}</span>
+            <h3>{signatureTitles[index]}</h3>
+            <p>{signature}</p>
+            <span class="signature-line" aria-hidden="true"></span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" data-section="states">
+      <header class="section-heading" data-reveal="pending">
+        <div><p class="eyebrow">TWO STATES / ONE IDENTITY</p><h2>发型会变，<br />她不会。</h2></div>
+        <p>同一张脸、同一种目光、同一个被反复确认的存在。</p>
+      </header>
+      <div class="state-showcase">
+        {lilithPublicProfile.states.map((state, index) => (
+          <a class="state-portrait spotlight-card" href="/lilith#states" data-tilt data-reveal="pending">
+            <img src={state.image} alt={`莉莉丝${state.name}状态`} />
+            <div class="state-overlay"><span>STATE 0{index + 1}</span><h3>{state.name}</h3><p>{state.description}</p></div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" data-section="gallery">
+      <header class="section-heading" data-reveal="pending">
+        <div><p class="eyebrow">SELECTED FRAGMENTS</p><h2>光落下以后，<br />她留下什么</h2></div>
+        <a class="button" href="/gallery">查看完整画廊</a>
+      </header>
+      <div class="home-gallery">
+        {lilithGalleryItems.map((item, index) => (
+          <figure class="home-gallery-item" data-reveal="pending">
+            <img src={item.src} alt={item.alt} />
+            <figcaption><span>0{index + 1}</span><strong>{item.title}</strong></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="section world-threshold" data-section="world" data-reveal="pending">
+      <p class="eyebrow">BEYOND THE PORTRAIT</p>
+      <h2>每一个看起来普通的房间，<br />都可能藏着一扇暗门。</h2>
+      <p>继续进入她所在的世界：关于名字、观看，以及如何真正靠近一个人。</p>
+      <a class="button secondary" href="/world">打开世界</a>
+      <span class="threshold-mark" aria-hidden="true">L</span>
+    </section>
   </div>
 </PublicLayout>

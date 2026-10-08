@@ -1,15 +1,67 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import Reveal from '../components/Reveal.astro';
 import { lilithPublicProfile } from '../data/lilith';
 ---
 <PublicLayout title="Lilith" active="/lilith">
   <div class="site-width">
-    <section class="section character-intro" style="padding-top: 5rem;">
-      <div class="character-copy"><p class="eyebrow">CHARACTER NOTE / LILITH</p><h1 class="page-title">她把光<br />留在眼睛里。</h1><div class="prose" style="margin-top:2rem;"><p>Lilith 是一个年轻的成年女性。她清纯、漂亮、安静，却并不透明。她更习惯观察，再决定要不要回应。</p><p>现代衣服让她看起来容易靠近；暗红色的虹膜内圈、浅蓝五角星吊坠，以及偶尔偏开的视线，提醒你她从来不只是一个普通的短剧女主。</p></div><div class="character-stats"><span><strong>{lilithPublicProfile.age}</strong> 岁 / 成人设定</span><span><strong>{lilithPublicProfile.heightCm}</strong> cm / 高挑比例</span></div></div><div class="portrait-frame" data-reveal="pending"><img src={lilithPublicProfile.visual.portrait} alt="莉莉丝日常肖像，柔黑发丝与清透肤色" /></div>
+    <section class="page-hero character-hero">
+      <span class="page-number" aria-hidden="true">01</span>
+      <div data-reveal="pending">
+        <p class="eyebrow">CHARACTER / LILITH</p>
+        <h1 class="page-title kinetic-title">她把光<br />留在眼睛里。</h1>
+        <p class="lede">不是为了被所有人理解。她只允许真正靠近的人，看见那一点温柔和危险如何同时存在。</p>
+      </div>
     </section>
-    <section class="section"><SectionHeading eyebrow="SIGNATURES" title="三个记忆点" summary="足够轻，能进入日常；足够准，一眼能认出她。" /><div class="card-grid">{lilithPublicProfile.signatures.map((signature, index) => <Reveal><article class="info-card"><p class="eyebrow">0{index + 1}</p><h3>{['暗红虹膜内圈', '浅蓝五角星', '现代状态'][index]}</h3><p>{signature}</p></article></Reveal>)}</div></section>
-    <section class="section"><SectionHeading eyebrow="STATES" title="同一个人，两种靠近方式" summary="服装和发型可以变化，脸、比例与那一点危险的目光不变。" /><div class="state-grid">{lilithPublicProfile.states.map((state) => <article class="state-card"><div class="state-image"><img src={state.image} alt={`莉莉丝${state.name}状态`} /></div><div><p class="eyebrow">{state.id === 'high-ponytail' ? 'STATE A' : 'STATE B'}</p><h3>{state.name}</h3><p>{state.description}</p></div></article>)}</div></section>
+
+    <section class="section editorial-grid">
+      <figure class="editorial-portrait spotlight-card" data-tilt data-reveal="pending">
+        <img src={lilithPublicProfile.visual.portrait} alt="莉莉丝日常肖像" />
+        <figcaption><span>PORTRAIT / 01</span><strong>THE QUIET GAZE</strong></figcaption>
+      </figure>
+      <div class="editorial-copy">
+        <p class="eyebrow">FIRST, SHE OBSERVES</p>
+        <h2>看起来容易靠近，<br />并不代表她毫无边界。</h2>
+        <div class="prose">
+          <p>莉莉丝清纯、漂亮、安静，却并不透明。她习惯先观察，再决定要不要回应；不会为了讨人喜欢而把自己变得更简单。</p>
+          <p>现代服装让她自然地走进现实。柔黑发丝、冷白肤色和高挑轮廓构成第一印象，近距离才能发现暗红虹膜内圈和那枚浅蓝五角星。</p>
+        </div>
+        <dl class="character-facts">
+          <div><dt>HEIGHT</dt><dd>{lilithPublicProfile.heightCm} cm</dd></div>
+          <div><dt>HAIR</dt><dd>柔黑 / 高马尾或披发</dd></div>
+          <div><dt>EYES</dt><dd>冰蓝 / 暗红内圈</dd></div>
+          <div><dt>MARK</dt><dd>浅蓝五角星</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section detail-ribbon" aria-label="莉莉丝标志性特征">
+      {lilithPublicProfile.signatures.map((signature, index) => (
+        <article data-reveal="pending"><span>0{index + 1}</span><p>{signature}</p></article>
+      ))}
+    </section>
+
+    <section class="section" id="states" data-section="states">
+      <header class="section-heading" data-reveal="pending">
+        <div><p class="eyebrow">STATES / 02</p><h2>两个瞬间，<br />同一个人。</h2></div>
+        <p>造型可以变化，身份不漂移。比起固定的服装，真正稳定的是她看向世界的方式。</p>
+      </header>
+      <div class="character-state-list">
+        {lilithPublicProfile.states.map((state, index) => (
+          <article class="character-state spotlight-card" data-tilt data-reveal="pending">
+            <div class="character-state-image"><img src={state.image} alt={`莉莉丝${state.name}状态`} /></div>
+            <div class="character-state-copy">
+              <span>STATE / 0{index + 1}</span>
+              <h3>{state.name}</h3>
+              <p>{state.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section character-quote" data-reveal="pending">
+      <p>“不要急着替她下定义。<br /><em>再看一会儿。</em>”</p>
+      <a class="button" href="/gallery">去看她留下的片段</a>
+    </section>
   </div>
 </PublicLayout>

@@ -19,6 +19,7 @@ export function initMotion(root: MotionRoot = document): () => void {
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        entry.target.classList.remove('motion-pending');
         entry.target.setAttribute('data-reveal', 'visible');
         observer?.unobserve(entry.target);
       });
@@ -26,8 +27,17 @@ export function initMotion(root: MotionRoot = document): () => void {
 
     elements.forEach((element, index) => {
       element.style.transitionDelay = `${Math.min(index * 70, 420)}ms`;
+      element.classList.add('motion-pending');
       observer?.observe(element);
     });
+
+    const revealFallback = window.setTimeout(() => {
+      elements.forEach((element) => {
+        element.classList.remove('motion-pending');
+        element.setAttribute('data-reveal', 'visible');
+      });
+    }, 1400);
+    cleanups.push(() => window.clearTimeout(revealFallback));
   }
 
   if (!reduced && finePointer) {

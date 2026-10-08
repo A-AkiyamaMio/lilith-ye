@@ -11,7 +11,7 @@ const { active = '' } = Astro.props;
   <div class="site-nav-links">
     {navigation.map((item, index) => (
       <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>
-        <span class="nav-index">0{index + 1}</span>{item.label}
+        <span class="nav-index">0{index + 1}</span><span class="nav-label">{item.label}</span>
       </a>
     ))}
   </div>

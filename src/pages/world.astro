@@ -1,9 +1,65 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import Reveal from '../components/Reveal.astro';
 import { lilithPublicProfile } from '../data/lilith';
+
+const chapters = [
+  {
+    number: '01',
+    title: '名字',
+    en: 'THE NAME',
+    text: `${lilithPublicProfile.name} 不是标签，而是一扇门。它让某种存在被看见，也决定了人们将如何靠近她。`,
+    image: lilithPublicProfile.visual.portrait,
+  },
+  {
+    number: '02',
+    title: '观看',
+    en: 'THE GAZE',
+    text: '暗红虹膜内圈不是装饰，而是观看关系的提醒：进入这里的人，也会被空间和自己的期待反过来观察。',
+    image: lilithPublicProfile.visual.hero,
+  },
+  {
+    number: '03',
+    title: '边界',
+    en: 'THE THRESHOLD',
+    text: '边界并不拒绝亲近。它让每一次靠近都更清楚、更自愿，也让真正的温柔不必以失去自己为代价。',
+    image: lilithPublicProfile.visual.pendant,
+  },
+];
 ---
 <PublicLayout title="世界" active="/world">
-  <div class="site-width"><section class="section" style="padding-top:5rem;"><p class="eyebrow">WORLD / OBSERVATION</p><h1 class="page-title">现代生活里<br />也有暗门。</h1><p class="lede" style="margin-top:2rem;">这个世界不靠宏大的地图成立。它由房间、窗光、沉默和被反复确认的边界组成。莉莉丝只是其中最清晰的一道目光。</p></section><section class="section"><SectionHeading eyebrow="THEMES" title="三个主题" summary="每一个主题都可以从日常物件开始。" /><div class="card-grid"><Reveal><article class="info-card"><p class="eyebrow">01</p><h3>名字</h3><p>{lilithPublicProfile.name} 不是标签，而是一扇门。它让某种存在被看见，也决定了被看见的方式。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">02</p><h3>观看</h3><p>暗红虹膜内圈不是装饰，而是观看关系的提醒：进入展厅的人，也会被空间和自己的期待反过来观察。</p></article></Reveal><Reveal><article class="info-card"><p class="eyebrow">03</p><h3>边界</h3><p>边界不是拒绝靠近，而是让靠近变得清楚。更深一层的档案以明确邀请和访问控制为前提。</p></article></Reveal></div></section></div>
+  <div class="site-width">
+    <section class="page-hero world-hero">
+      <span class="page-number" aria-hidden="true">03</span>
+      <div data-reveal="pending">
+        <p class="eyebrow">WORLD / 03</p>
+        <h1 class="page-title kinetic-title">现代生活里，<br />也有暗门。</h1>
+        <p class="lede">这个世界不靠宏大的地图成立。它由房间、窗光、沉默，以及被反复确认的边界组成。</p>
+      </div>
+    </section>
+
+    <section class="world-intro section" data-reveal="pending">
+      <span class="world-coordinate">31.2304° N / 121.4737° E</span>
+      <p>如果莉莉丝真的生活在某个地方，那不会是一座遥远的城堡。她就在现代城市里，在每一扇亮得太晚的窗后，在夜色映入镜子的一瞬间。</p>
+    </section>
+
+    <section class="world-chapters" aria-label="莉莉丝世界的三个章节">
+      {chapters.map((chapter, index) => (
+        <article class={`chapter-panel chapter-${index + 1}`} data-reveal="pending">
+          <div class="chapter-image spotlight-card" data-tilt><img src={chapter.image} alt={`莉莉丝世界章节：${chapter.title}`} /></div>
+          <div class="chapter-copy">
+            <span class="chapter-count">{chapter.number} / 03</span>
+            <p class="eyebrow">{chapter.en}</p>
+            <h2>{chapter.title}</h2>
+            <p>{chapter.text}</p>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <section class="section world-coda" data-reveal="pending">
+      <p class="eyebrow">THE DOOR REMAINS OPEN</p>
+      <h2>世界不是背景。<br />它是她选择如何存在的方式。</h2>
+      <div class="button-row"><a class="button" href="/lilith">回到她身边</a><a class="button secondary" href="/gallery">重看画面</a></div>
+    </section>
+  </div>
 </PublicLayout>

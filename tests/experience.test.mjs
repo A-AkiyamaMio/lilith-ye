@@ -35,3 +35,28 @@ test('motion runtime supports pointer aura and tilt without hiding content', () 
   assert.match(motion, /IntersectionObserver/);
   assert.match(motion, /data-reveal.*visible/s);
 });
+
+test('landing page is a complete multi-chapter exhibition', () => {
+  const page = read('src/pages/index.astro');
+  assert.match(page, /data-experience="hero"/);
+  assert.match(page, /data-section="manifesto"/);
+  assert.match(page, /data-section="signatures"/);
+  assert.match(page, /data-section="states"/);
+  assert.match(page, /data-section="gallery"/);
+  assert.match(page, /MarqueeBand/);
+  assert.match(page, /href="\/lilith"/);
+  assert.match(page, /href="\/gallery"/);
+  assert.match(page, /href="\/world"/);
+});
+
+test('every public route has its own editorial composition', () => {
+  const character = read('src/pages/lilith.astro');
+  const gallery = read('src/pages/gallery.astro');
+  const world = read('src/pages/world.astro');
+  assert.match(character, /editorial-grid/);
+  assert.match(character, /data-section="states"/);
+  assert.match(gallery, /gallery-masonry/);
+  assert.match(gallery, /data-tilt/);
+  assert.match(world, /chapter-panel/);
+  assert.match(world, /WORLD \/ 03/);
+});

@@ -153,13 +153,19 @@ img {
 }
 
 [data-reveal] {
-  opacity: 0;
-  filter: blur(10px);
-  transform: translateY(2.25rem);
+  opacity: 1;
+  filter: none;
+  transform: translateY(0);
   transition:
     opacity 900ms var(--ease-out),
     filter 900ms var(--ease-out),
     transform 900ms var(--ease-out);
+}
+
+[data-reveal].motion-pending {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(2.25rem);
 }
 
 [data-reveal='visible'] {
