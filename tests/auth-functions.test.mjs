@@ -115,6 +115,35 @@ test('rejects malformed, oversized, overlong, non-string, and cross-origin reque
   }
 });
 
+test('cancels an oversized streaming body before waiting for its remaining chunks', async () => {
+  const { env } = await fixture();
+  let cancelled = false;
+  let controller;
+  const body = new ReadableStream({
+    start(streamController) {
+      controller = streamController;
+      streamController.enqueue(new Uint8Array(8_193));
+    },
+    pull() { return new Promise(() => {}); },
+    cancel() { cancelled = true; },
+  });
+  const input = new Request('https://lilith-ye.vip/api/auth/login', {
+    method: 'POST',
+    headers: { Origin: 'https://lilith-ye.vip', 'Content-Type': 'application/json' },
+    body,
+    duplex: 'half',
+  });
+  const pending = login({ request: input, env });
+  const timeout = Symbol('timeout');
+  const response = await Promise.race([pending, new Promise((resolve) => setTimeout(() => resolve(timeout), 100))]);
+  if (response === timeout) {
+    controller.error(new Error('test cleanup'));
+    await pending;
+  }
+  assert.equal(response?.status, 413, 'oversized stream should be rejected immediately');
+  assert.equal(cancelled, true, 'remaining chunks should not be read');
+});
+
 test('returns 503 when runtime configuration is absent', async () => {
   const response = await login({ request: request({ identifier: 'mio', password: 'x' }), env: {} });
   assert.equal(response.status, 503);

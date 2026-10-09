@@ -38,10 +38,30 @@ async function readJsonBody(request) {
   if (!type.toLowerCase().startsWith('application/json')) {
     const error = new Error('JSON required'); error.status = 400; throw error;
   }
-  const text = await request.text();
-  if (new TextEncoder().encode(text).byteLength > MAX_BODY_BYTES) {
-    const error = new Error('Payload too large'); error.status = 413; throw error;
+  const reader = request.body?.getReader();
+  if (!reader) { const error = new Error('Invalid body'); error.status = 400; throw error; }
+  const chunks = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      totalBytes += value.byteLength;
+      if (totalBytes > MAX_BODY_BYTES) {
+        await reader.cancel();
+        const error = new Error('Payload too large'); error.status = 413; throw error;
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
   }
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  let text;
+  try { text = new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
+  catch { const error = new Error('Invalid encoding'); error.status = 400; throw error; }
   let value;
   try { value = JSON.parse(text); } catch { const error = new Error('Invalid JSON'); error.status = 400; throw error; }
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -114,4 +134,3 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, message: '登录服务暂时不可用。' }, 503);
   }
 }
-
