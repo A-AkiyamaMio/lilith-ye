@@ -14,5 +14,8 @@ const { active = '' } = Astro.props;
         <span class="nav-index">0{index + 1}</span><span class="nav-label">{item.label}</span>
       </a>
     ))}
+    <a href="/login/" aria-current={active === '/login/' ? 'page' : undefined}>
+      <span class="nav-index">05</span><span class="nav-label">登录</span>
+    </a>
   </div>
 </nav>

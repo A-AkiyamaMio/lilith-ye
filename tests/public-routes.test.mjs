@@ -42,6 +42,7 @@ test('public page sources expose canonical signatures without importing archive 
 
 test('public navigation does not expose the private archive entry point', () => {
   const source = fs.readFileSync(path.join(root, publicNavigation), 'utf8');
+  assert.match(source, /href=[{"']+\/login\/?[}"']+/);
   assert.doesNotMatch(source, /href=["']\/archive["']/);
 });
 

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/framework.css';
+import '../styles/auth.css';
 import SiteNav from '../components/SiteNav.astro';
 import PageTransition from '../components/PageTransition.astro';
 const { title, active = '/archive' } = Astro.props;
@@ -23,10 +24,17 @@ const links = [
     <a class="skip-link" href="#main">跳到主要内容</a>
     <SiteNav active={active} />
     <div class="archive-layout">
-      <aside class="archive-sidebar"><p class="eyebrow">PRIVATE ARCHIVE</p><nav aria-label="档案导航">{links.map(([label, href]) => <a href={href} aria-current={active === href ? 'page' : undefined}>{label}</a>)}</nav></aside>
+      <aside class="archive-sidebar">
+        <p class="eyebrow">PRIVATE ARCHIVE</p>
+        <nav aria-label="档案导航">{links.map(([label, href]) => <a href={href} aria-current={active === href ? 'page' : undefined}>{label}</a>)}</nav>
+        <div class="archive-account">
+          <small>Administrator</small>
+          <div class="archive-account-row"><strong data-administrator-label>Mio</strong><button class="archive-logout" type="button" data-logout>退出</button></div>
+        </div>
+      </aside>
       <main id="main" class="archive-main"><slot /></main>
     </div>
     <PageTransition />
-    <script>import { initMotion } from '../lib/motion'; initMotion();</script>
+    <script>import { initMotion } from '../lib/motion'; import { initArchiveSessionControls } from '../lib/auth-client'; initMotion(); initArchiveSessionControls();</script>
   </body>
 </html>
