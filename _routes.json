@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "include": [
+    "/api/auth/*",
+    "/archive",
+    "/archive/*"
+  ],
+  "exclude": [
+    "/_astro/*",
+    "/assets/*"
+  ]
+}

@@ -24,7 +24,25 @@ npm run dev
 
 ## 访问控制
 
-生产环境应保护 `lilith-ye.vip/archive/*`，只允许 Cloudflare Access 邀请的身份访问。访问控制由 Cloudflare 边缘策略负责，不能用前端隐藏代替。
+私人档案使用 Cloudflare Pages Functions 与 D1 会话验证保护。`/archive` 和 `/archive/*` 必须由 `functions/_middleware.js` 拦截；`public/_routes.json` 将 Functions 执行限制在档案及 `/api/auth/*`，公开展览和静态资源继续直接由 Pages 提供。
+
+部署前先为 Pages 项目绑定现有 D1 数据库 `lilith-ye-db`，绑定名称为 `AUTH_DB`，并在 Preview 与 Production 环境分别设置以下加密 Secrets：
+
+- `ADMIN_USERNAME`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD_HASH`
+- `ADMIN_PASSWORD_SALT`
+- `SESSION_SECRET`
+
+密码哈希使用 PBKDF2-HMAC-SHA-256、600,000 次迭代和 32 字节输出；盐与会话密钥应使用密码学安全随机数生成。只把哈希、盐和密钥放入 Cloudflare Secrets，不要把密码或密钥写入仓库、命令历史或日志。`.env*` 与 `.dev.vars*` 已加入忽略规则。
+
+在 Cloudflare CLI 已登录后，把迁移应用到远程数据库：
+
+```text
+wrangler d1 migrations apply lilith-ye-db --remote
+```
+
+用 `wrangler pages secret put <SECRET_NAME> --project-name lilith-ye` 添加加密 Secret。不要把 Secret 值作为命令参数；在提示符中输入。先发布 Preview 并验证登录、注销及全部档案路由，再发布 Production。缺少 Secrets 或 D1 时，档案中间件会返回不可用响应，不会放行静态档案。
 
 ## 安全
 
