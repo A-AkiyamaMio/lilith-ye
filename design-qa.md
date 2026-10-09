@@ -22,3 +22,12 @@
 - 代码、静态构建、自动化测试和本地视觉检查均已完成。
 - `/archive/*` 已输出 `noindex,nofollow,noarchive` 与 `no-store`；Cloudflare Access 属于边缘配置，仍需在 Cloudflare 控制台独立维持。
 - 当前实现分支：`redesign/lilith-motion`；合并 `main` 后由 Cloudflare Pages 构建并发布。
+
+## 2026-10-09 管理员登录实现（本地）
+
+- 新增 `/login/` 管理员登录体验，支持账号/邮箱、密码显隐、记住我、错误状态提示和安全返回档案路径。
+- 新增 Pages Functions 登录、会话、退出接口；PBKDF2-HMAC-SHA-256 密码校验、HttpOnly/Secure/SameSite=Strict 会话 Cookie、失败限流和 D1 失效会话管理。
+- 登录请求体按流读取并在超过 8 KiB 时取消后续读取。
+- `/archive` 及子路由经过会话中间件；会话无效、绑定缺失或 D1 异常时不调用静态档案响应；公开路径不进入 Functions。
+- 本地验证：`pnpm test` 49/49 通过；`pnpm run publish:root` 成功；根目录包含 `login/index.html` 与 `_routes.json`，`functions/` 和 `migrations/` 保持原位。
+- 线上验证未完成：Wrangler 未登录；D1 迁移、Preview/Production 的 `AUTH_DB` 与加密 Secrets、GitHub `main` 发布及 Cloudflare 路由检查均待授权后执行。
