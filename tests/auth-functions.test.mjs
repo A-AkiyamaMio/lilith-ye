@@ -9,35 +9,39 @@ import { onRequestPost as logout } from '../functions/api/auth/logout.js';
 class Statement {
   constructor(db, sql) { this.db = db; this.sql = sql; this.args = []; }
   bind(...args) { this.args = args; return this; }
-  run() { return this.db.execute(this.sql, this.args); }
-  first() { return this.db.execute(this.sql, this.args); }
+  run() { return this.db.execute(this.sql, this.args, 'run'); }
+  first() { return this.db.execute(this.sql, this.args, 'first'); }
 }
 
 class FakeD1 {
   constructor() { this.sessions = new Map(); this.attempts = new Map(); }
   prepare(sql) { return new Statement(this, sql); }
   execute(sql, args) {
-    if (sql.includes('INSERT INTO auth_sessions')) {
+    const normalizedSql = sql.trim().replace(/\s+/gu, ' ');
+    if (normalizedSql.includes('INSERT INTO auth_sessions')) {
       this.sessions.set(args[0], { token_hash: args[0], created_at: args[1], expires_at: args[2], last_seen_at: args[3] });
       return { success: true };
     }
-    if (sql.startsWith('DELETE FROM auth_sessions WHERE token_hash')) { this.sessions.delete(args[0]); return { success: true }; }
-    if (sql.startsWith('DELETE FROM auth_sessions WHERE expires_at')) return { success: true };
-    if (sql.includes('FROM auth_sessions')) {
+    if (normalizedSql.startsWith('DELETE FROM auth_sessions WHERE token_hash =')) { this.sessions.delete(args[0]); return { success: true }; }
+    if (normalizedSql.startsWith('DELETE FROM auth_sessions WHERE token_hash IN')) return { success: true };
+    if (normalizedSql.startsWith('DELETE FROM auth_sessions WHERE expires_at')) return { success: true };
+    if (normalizedSql.includes('FROM auth_sessions')) {
       const row = this.sessions.get(args[0]); return row && row.expires_at > args[1] ? row : null;
     }
-    if (sql.includes('INSERT INTO auth_attempts')) {
+    if (normalizedSql.includes('INSERT INTO auth_attempts')) {
       const [fingerprint, now] = args;
       const old = this.attempts.get(fingerprint);
-      const reset = !old || now - old.window_started_at >= 900;
+      const activeBlock = old?.blocked_until > now;
+      const reset = !old || (!activeBlock && now - old.window_started_at >= 900);
       const failures = reset ? 1 : old.failures + 1;
-      const blocked_until = !reset && failures >= 5 ? Math.max(old.blocked_until, now + 1800) : 0;
+      const blocked_until = activeBlock ? old.blocked_until : (!reset && failures >= 5 ? Math.max(old.blocked_until, now + 1800) : 0);
       this.attempts.set(fingerprint, { fingerprint, failures, window_started_at: reset ? now : old.window_started_at, blocked_until });
       return { failures, blocked_until };
     }
-    if (sql.startsWith('DELETE FROM auth_attempts')) { this.attempts.delete(args[0]); return { success: true }; }
-    if (sql.includes('FROM auth_attempts')) return this.attempts.get(args[0]) ?? null;
-    throw new Error(`Unexpected SQL: ${sql}`);
+    if (normalizedSql.startsWith('DELETE FROM auth_attempts WHERE fingerprint =')) { this.attempts.delete(args[0]); return { success: true }; }
+    if (normalizedSql.startsWith('DELETE FROM auth_attempts WHERE fingerprint IN')) return { success: true };
+    if (normalizedSql.includes('FROM auth_attempts')) return this.attempts.get(args[0]) ?? null;
+    throw new Error(`Unexpected SQL: ${normalizedSql}`);
   }
 }
 
@@ -98,6 +102,16 @@ test('invalid identifiers and passwords share one response and rate-limit on att
   }
 });
 
+test('username and email aliases share the same administrator rate limit', async () => {
+  const { env } = await fixture();
+  const identifiers = ['mio', 'mio@example.test', ' MIO ' , 'MIO@EXAMPLE.TEST'];
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const response = await login({ request: request({ identifier: identifiers[attempt % identifiers.length], password: 'wrong' }), env });
+    assert.equal(response.status, attempt === 4 ? 429 : 401);
+  }
+  assert.equal(env.AUTH_DB.attempts.size, 1);
+});
+
 test('rejects malformed, oversized, overlong, non-string, and cross-origin requests safely', async () => {
   const { env } = await fixture();
   const cases = [
@@ -125,7 +139,7 @@ test('cancels an oversized streaming body before waiting for its remaining chunk
       streamController.enqueue(new Uint8Array(8_193));
     },
     pull() { return new Promise(() => {}); },
-    cancel() { cancelled = true; },
+    cancel() { cancelled = true; throw new Error('stream cancellation failed'); },
   });
   const input = new Request('https://lilith-ye.vip/api/auth/login', {
     method: 'POST',
@@ -166,4 +180,21 @@ test('session reports a fixed label and logout invalidates the token', async () 
   assert.match(ended.headers.get('Set-Cookie'), /Max-Age=0/);
   assert.deepEqual(await (await session({ request: sessionRequest, env })).json(), { authenticated: false });
   assert.equal(env.AUTH_DB.sessions.size, 0);
+});
+
+test('logout keeps the cookie when session revocation fails and reports service unavailable', async () => {
+  const { env } = await fixture();
+  const loginResponse = await login({ request: request({ identifier: 'mio', password: 'Exact Password ' }), env });
+  const cookie = loginResponse.headers.get('Set-Cookie').split(';')[0];
+  const originalDelete = env.AUTH_DB.execute.bind(env.AUTH_DB);
+  env.AUTH_DB.execute = (sql, args) => {
+    if (sql.startsWith('DELETE FROM auth_sessions WHERE token_hash =')) throw new Error('database unavailable');
+    return originalDelete(sql, args);
+  };
+  const response = await logout({ request: new Request('https://lilith-ye.vip/api/auth/logout', {
+    method: 'POST', headers: { Cookie: cookie, Origin: 'https://lilith-ye.vip' },
+  }), env });
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get('Set-Cookie'), null);
+  assert.deepEqual(await response.json(), { ok: false });
 });

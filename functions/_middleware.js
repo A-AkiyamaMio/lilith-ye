@@ -1,5 +1,5 @@
-import { hashOpaqueValue, readCookie, safeArchiveNext } from './_lib/auth.js';
-import { findSession } from './_lib/store.js';
+import { hasAdminAuthConfig, hashOpaqueValue, readCookie, safeArchiveNext } from './_lib/auth.js';
+import { cleanupAuthRecords, findSession } from './_lib/store.js';
 
 const ARCHIVE_HEADERS = {
   'Cache-Control': 'private, no-store',
@@ -28,13 +28,14 @@ export async function onRequest(context) {
   if (path !== '/archive' && !path.startsWith('/archive/')) return context.next();
 
   const { env, request } = context;
-  if (!env?.AUTH_DB || !env?.SESSION_SECRET) {
+  if (!hasAdminAuthConfig(env)) {
     return archiveResponse('Private archive is temporarily unavailable.', 503);
   }
-  const token = readCookie(request, 'lilith_admin_session');
-  if (!token) return loginRedirect(request);
 
   try {
+    await cleanupAuthRecords(env.AUTH_DB, Math.floor(Date.now() / 1000));
+    const token = readCookie(request, 'lilith_admin_session');
+    if (!token) return loginRedirect(request);
     const tokenHash = await hashOpaqueValue(env.SESSION_SECRET, token);
     const session = await findSession(env.AUTH_DB, tokenHash, Math.floor(Date.now() / 1000));
     if (!session) return loginRedirect(request);

@@ -1,13 +1,14 @@
 import {
   assertSameOrigin,
+  administratorAttemptIdentifier,
+  hasAdminAuthConfig,
   hashOpaqueValue,
-  normalizeIdentifier,
   randomSessionToken,
   safeArchiveNext,
   sessionCookie,
   verifyAdminCredentials,
 } from '../../_lib/auth.js';
-import { clearFailures, createSession, readAttempt, recordFailure } from '../../_lib/store.js';
+import { cleanupAuthRecords, clearFailures, createSession, readAttempt, recordFailure } from '../../_lib/store.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 const DEFAULT_SESSION_SECONDS = 12 * 60 * 60;
@@ -18,15 +19,6 @@ function json(payload, status, headers = {}) {
     status,
     headers: { 'Cache-Control': 'no-store', ...headers },
   });
-}
-
-function configured(env) {
-  return Boolean(env?.AUTH_DB
-    && env?.ADMIN_USERNAME
-    && env?.ADMIN_EMAIL
-    && env?.ADMIN_PASSWORD_HASH
-    && env?.ADMIN_PASSWORD_SALT
-    && env?.SESSION_SECRET);
 }
 
 async function readJsonBody(request) {
@@ -48,7 +40,7 @@ async function readJsonBody(request) {
       if (done) break;
       totalBytes += value.byteLength;
       if (totalBytes > MAX_BODY_BYTES) {
-        await reader.cancel();
+        try { await reader.cancel(); } catch { /* Preserve the intended 413 response. */ }
         const error = new Error('Payload too large'); error.status = 413; throw error;
       }
       chunks.push(value);
@@ -76,7 +68,7 @@ export async function onRequestPost({ request, env }) {
   } catch {
     return json({ ok: false, message: '无法确认请求来源，请刷新后重试。' }, 403);
   }
-  if (!configured(env)) return json({ ok: false, message: '登录服务暂时不可用。' }, 503);
+  if (!hasAdminAuthConfig(env)) return json({ ok: false, message: '登录服务暂时不可用。' }, 503);
 
   let body;
   try {
@@ -97,8 +89,9 @@ export async function onRequestPost({ request, env }) {
 
   const now = Math.floor(Date.now() / 1000);
   const source = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-  const fingerprint = await hashOpaqueValue(env.SESSION_SECRET, `${normalizeIdentifier(identifier)}\n${source}`);
+  const fingerprint = await hashOpaqueValue(env.SESSION_SECRET, `${administratorAttemptIdentifier(env, identifier)}\n${source}`);
   try {
+    await cleanupAuthRecords(env.AUTH_DB, now);
     const attempt = await readAttempt(env.AUTH_DB, fingerprint, now);
     if (attempt.blockedUntil > now) {
       const retryAfter = attempt.blockedUntil - now;

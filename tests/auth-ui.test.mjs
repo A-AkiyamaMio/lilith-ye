@@ -30,11 +30,15 @@ test('login client posts JSON, prevents duplicates, and follows only server-appr
   assert.match(client, /export function initArchiveSessionControls/u);
   assert.match(client, /\/api\/auth\/logout/u);
   assert.match(client, /\/api\/auth\/session/u);
+  assert.match(client, /response\.ok\s*&&\s*payload\.ok/u);
+  assert.match(client, /data-logout-status/u);
+  assert.match(client, /登出失败/u);
 });
 
 test('archive layout shows administrator identity and an explicit logout control', async () => {
   const layout = await read('src/layouts/ArchiveLayout.astro');
   assert.match(layout, /data-administrator-label/u);
   assert.match(layout, /data-logout/u);
+  assert.match(layout, /data-logout-status[^>]+aria-live="polite"/u);
   assert.match(layout, /initArchiveSessionControls/u);
 });

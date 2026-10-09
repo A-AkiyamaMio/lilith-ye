@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
+  cleanupAuthRecords,
   clearExpiredSessions,
   clearFailures,
   createSession,
@@ -24,35 +25,50 @@ class FakeD1 {
   prepare(sql) { return new FakeStatement(this, sql); }
   execute(sql, args, mode) {
     this.calls.push({ sql, args, mode });
-    if (sql.includes('INSERT INTO auth_sessions')) {
+    const normalizedSql = sql.trim().replace(/\s+/gu, ' ');
+    if (normalizedSql.includes('INSERT INTO auth_sessions')) {
       const [tokenHash, createdAt, expiresAt, lastSeenAt] = args;
       this.sessions.set(tokenHash, { token_hash: tokenHash, created_at: createdAt, expires_at: expiresAt, last_seen_at: lastSeenAt });
       return { success: true };
     }
-    if (sql.startsWith('DELETE FROM auth_sessions WHERE token_hash')) {
+    if (normalizedSql.startsWith('DELETE FROM auth_sessions WHERE token_hash =')) {
       this.sessions.delete(args[0]); return { success: true };
     }
-    if (sql.startsWith('DELETE FROM auth_sessions WHERE expires_at')) {
+    if (normalizedSql.includes('token_hash IN ( SELECT token_hash')) {
+      const [expiry] = args;
+      const limit = args.at(-1);
+      const keys = [...this.sessions.values()].filter((row) => row.expires_at <= expiry).slice(0, limit).map((row) => row.token_hash);
+      keys.forEach((key) => this.sessions.delete(key));
+      return { success: true };
+    }
+    if (normalizedSql.startsWith('DELETE FROM auth_sessions WHERE expires_at')) {
       for (const [key, row] of this.sessions) if (row.expires_at <= args[0]) this.sessions.delete(key);
       return { success: true };
     }
-    if (sql.includes('FROM auth_sessions')) {
+    if (normalizedSql.includes('FROM auth_sessions')) {
       const row = this.sessions.get(args[0]);
       return row && row.expires_at > args[1] ? row : null;
     }
-    if (sql.includes('INSERT INTO auth_attempts')) {
+    if (normalizedSql.includes('INSERT INTO auth_attempts')) {
       const [fingerprint, now] = args;
       const old = this.attempts.get(fingerprint);
-      const reset = !old || now - old.window_started_at >= 900;
+      const activeBlock = old?.blocked_until > now;
+      const reset = !old || (!activeBlock && now - old.window_started_at >= 900);
       const failures = reset ? 1 : old.failures + 1;
-      const blockedUntil = !reset && failures >= 5 ? Math.max(old.blocked_until, now + 1800) : 0;
+      const blockedUntil = activeBlock ? old.blocked_until : (!reset && failures >= 5 ? Math.max(old.blocked_until, now + 1800) : 0);
       const row = { fingerprint, failures, window_started_at: reset ? now : old.window_started_at, blocked_until: blockedUntil };
       this.attempts.set(fingerprint, row);
       return { failures, blocked_until: blockedUntil };
     }
-    if (sql.startsWith('DELETE FROM auth_attempts')) { this.attempts.delete(args[0]); return { success: true }; }
-    if (sql.includes('FROM auth_attempts')) return this.attempts.get(args[0]) ?? null;
-    throw new Error(`Unexpected SQL: ${sql}`);
+    if (normalizedSql.includes('fingerprint IN ( SELECT fingerprint')) {
+      const [windowCutoff, now, limit] = args;
+      const keys = [...this.attempts.values()].filter((row) => row.window_started_at <= windowCutoff && row.blocked_until <= now).slice(0, limit).map((row) => row.fingerprint);
+      keys.forEach((key) => this.attempts.delete(key));
+      return { success: true };
+    }
+    if (normalizedSql.startsWith('DELETE FROM auth_attempts WHERE fingerprint =')) { this.attempts.delete(args[0]); return { success: true }; }
+    if (normalizedSql.includes('FROM auth_attempts')) return this.attempts.get(args[0]) ?? null;
+    throw new Error(`Unexpected SQL: ${normalizedSql}`);
   }
 }
 
@@ -80,7 +96,7 @@ test('session records reject expiry and support deletion and cleanup', async () 
   assert.deepEqual(db.calls[0].args, ['a', 100, 200, 100]);
 });
 
-test('failure counting is atomic, blocks at five, resets after 15 minutes, and clears', async () => {
+test('failure counting is atomic, blocks at five for the full 30 minutes, then resets', async () => {
   const db = new FakeD1();
   const fingerprint = 'fingerprint';
   const firstTwo = await Promise.all([
@@ -93,11 +109,27 @@ test('failure counting is atomic, blocks at five, resets after 15 minutes, and c
   const fifth = await recordFailure(db, fingerprint, 1_004);
   assert.deepEqual(fifth, { failures: 5, blockedUntil: 2_804 });
   assert.deepEqual(await readAttempt(db, fingerprint, 1_005), { failures: 5, blockedUntil: 2_804 });
-  const reset = await recordFailure(db, fingerprint, 1_901);
+  assert.deepEqual(await readAttempt(db, fingerprint, 1_901), { failures: 5, blockedUntil: 2_804 });
+  assert.deepEqual(await readAttempt(db, fingerprint, 2_803), { failures: 5, blockedUntil: 2_804 });
+  const reset = await recordFailure(db, fingerprint, 2_804);
   assert.deepEqual(reset, { failures: 1, blockedUntil: 0 });
   await clearFailures(db, fingerprint);
-  assert.deepEqual(await readAttempt(db, fingerprint, 1_902), { failures: 0, blockedUntil: 0 });
+  assert.deepEqual(await readAttempt(db, fingerprint, 2_805), { failures: 0, blockedUntil: 0 });
   const upsert = db.calls.find((call) => call.sql.includes('INSERT INTO auth_attempts'));
   assert.match(upsert.sql, /ON CONFLICT\s*\(fingerprint\)\s*DO UPDATE/i);
   assert.match(upsert.sql, /RETURNING\s+failures\s*,\s*blocked_until/i);
+});
+
+test('opportunistic cleanup is bounded and retains active login blocks', async () => {
+  const db = new FakeD1();
+  await createSession(db, { tokenHash: 'expired', createdAt: 1, expiresAt: 5, lastSeenAt: 1 });
+  await createSession(db, { tokenHash: 'live', createdAt: 1, expiresAt: 500, lastSeenAt: 1 });
+  db.attempts.set('stale', { fingerprint: 'stale', failures: 1, window_started_at: 1, blocked_until: 0 });
+  db.attempts.set('blocked', { fingerprint: 'blocked', failures: 5, window_started_at: 1, blocked_until: 2_000 });
+  await cleanupAuthRecords(db, 1_000, 1);
+  assert.equal(db.sessions.has('expired'), false);
+  assert.equal(db.sessions.has('live'), true);
+  assert.equal(db.attempts.has('stale'), false);
+  assert.equal(db.attempts.has('blocked'), true);
+  assert.ok(db.calls.filter(({ sql }) => sql.startsWith('DELETE FROM')).every(({ sql }) => /LIMIT\s*\?/iu.test(sql)));
 });

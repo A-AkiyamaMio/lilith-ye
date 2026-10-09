@@ -21,8 +21,29 @@ export async function deleteSession(db, tokenHash) {
   return db.prepare('DELETE FROM auth_sessions WHERE token_hash = ?').bind(tokenHash).run();
 }
 
-export async function clearExpiredSessions(db, now) {
-  return db.prepare('DELETE FROM auth_sessions WHERE expires_at <= ?').bind(now).run();
+export async function clearExpiredSessions(db, now, limit = 32) {
+  return db.prepare(`
+    DELETE FROM auth_sessions
+    WHERE token_hash IN (
+      SELECT token_hash FROM auth_sessions WHERE expires_at <= ? ORDER BY expires_at LIMIT ?
+    )
+  `).bind(now, limit).run();
+}
+
+export async function clearExpiredAttempts(db, now, limit = 32) {
+  return db.prepare(`
+    DELETE FROM auth_attempts
+    WHERE fingerprint IN (
+      SELECT fingerprint FROM auth_attempts
+      WHERE window_started_at <= ? AND blocked_until <= ?
+      ORDER BY window_started_at LIMIT ?
+    )
+  `).bind(now - ATTEMPT_WINDOW_SECONDS, now, limit).run();
+}
+
+export async function cleanupAuthRecords(db, now, limit = 32) {
+  await clearExpiredSessions(db, now, limit);
+  await clearExpiredAttempts(db, now, limit);
 }
 
 export async function readAttempt(db, fingerprint, now) {
@@ -32,7 +53,7 @@ export async function readAttempt(db, fingerprint, now) {
     WHERE fingerprint = ?
     LIMIT 1
   `).bind(fingerprint).first();
-  if (!row || now - row.window_started_at >= ATTEMPT_WINDOW_SECONDS) {
+  if (!row || (row.blocked_until <= now && now - row.window_started_at >= ATTEMPT_WINDOW_SECONDS)) {
     return { failures: 0, blockedUntil: 0 };
   }
   return { failures: row.failures, blockedUntil: row.blocked_until };
@@ -44,14 +65,17 @@ export async function recordFailure(db, fingerprint, now) {
     VALUES (?, 1, ?, 0)
     ON CONFLICT(fingerprint) DO UPDATE SET
       failures = CASE
+        WHEN auth_attempts.blocked_until > excluded.window_started_at THEN auth_attempts.failures + 1
         WHEN excluded.window_started_at - auth_attempts.window_started_at >= 900 THEN 1
         ELSE auth_attempts.failures + 1
       END,
       window_started_at = CASE
+        WHEN auth_attempts.blocked_until > excluded.window_started_at THEN auth_attempts.window_started_at
         WHEN excluded.window_started_at - auth_attempts.window_started_at >= 900 THEN excluded.window_started_at
         ELSE auth_attempts.window_started_at
       END,
       blocked_until = CASE
+        WHEN auth_attempts.blocked_until > excluded.window_started_at THEN auth_attempts.blocked_until
         WHEN excluded.window_started_at - auth_attempts.window_started_at >= 900 THEN 0
         WHEN auth_attempts.failures + 1 >= 5 THEN MAX(auth_attempts.blocked_until, excluded.window_started_at + 1800)
         ELSE auth_attempts.blocked_until

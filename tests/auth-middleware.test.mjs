@@ -7,6 +7,7 @@ import { onRequest } from '../functions/_middleware.js';
 class Statement {
   constructor(db, sql) { this.db = db; this.sql = sql; this.args = []; }
   bind(...args) { this.args = args; return this; }
+  run() { return this.db.execute(this.sql, this.args, 'run'); }
   first() {
     if (this.db.throwOnRead) throw new Error('database unavailable');
     const row = this.db.sessions.get(this.args[0]);
@@ -17,6 +18,10 @@ class Statement {
 class FakeD1 {
   constructor() { this.sessions = new Map(); this.throwOnRead = false; }
   prepare(sql) { return new Statement(this, sql); }
+  execute(sql) {
+    if (sql.trimStart().startsWith('DELETE FROM')) return { success: true };
+    throw new Error(`Unexpected SQL: ${sql}`);
+  }
 }
 
 function context({ path = '/archive/profile/?tab=history', cookie, env, next } = {}) {
@@ -29,7 +34,7 @@ function context({ path = '/archive/profile/?tab=history', cookie, env, next } =
 }
 
 test('anonymous archive requests redirect to a same-origin login destination', async () => {
-  const response = await onRequest(context({ env: { AUTH_DB: new FakeD1(), SESSION_SECRET: 'secret' } }));
+  const response = await onRequest(context({ env: { AUTH_DB: new FakeD1(), ADMIN_USERNAME: 'mio', ADMIN_EMAIL: 'mio@example.test', ADMIN_PASSWORD_HASH: 'hash', ADMIN_PASSWORD_SALT: 'salt', SESSION_SECRET: 'secret' } }));
   assert.equal(response.status, 302);
   assert.equal(response.headers.get('Location'), '/login/?next=%2Farchive%2Fprofile%2F%3Ftab%3Dhistory');
   assert.match(response.headers.get('Cache-Control'), /no-store/);
@@ -38,7 +43,7 @@ test('anonymous archive requests redirect to a same-origin login destination', a
 
 test('only a current known session reaches the static archive handler', async () => {
   const db = new FakeD1();
-  const env = { AUTH_DB: db, SESSION_SECRET: 'secret' };
+  const env = { AUTH_DB: db, ADMIN_USERNAME: 'mio', ADMIN_EMAIL: 'mio@example.test', ADMIN_PASSWORD_HASH: 'hash', ADMIN_PASSWORD_SALT: 'salt', SESSION_SECRET: 'secret' };
   const token = 'valid-token';
   const hash = await hashOpaqueValue(env.SESSION_SECRET, token);
   db.sessions.set(hash, { token_hash: hash, expires_at: Math.floor(Date.now() / 1000) + 300 });
@@ -52,7 +57,7 @@ test('only a current known session reaches the static archive handler', async ()
 
 test('malformed, unknown, and expired sessions never reach archive content', async () => {
   const db = new FakeD1();
-  const env = { AUTH_DB: db, SESSION_SECRET: 'secret' };
+  const env = { AUTH_DB: db, ADMIN_USERNAME: 'mio', ADMIN_EMAIL: 'mio@example.test', ADMIN_PASSWORD_HASH: 'hash', ADMIN_PASSWORD_SALT: 'salt', SESSION_SECRET: 'secret' };
   const expired = await hashOpaqueValue(env.SESSION_SECRET, 'expired');
   db.sessions.set(expired, { token_hash: expired, expires_at: 1 });
   for (const cookie of ['%', 'unknown', 'expired']) {
@@ -60,6 +65,22 @@ test('malformed, unknown, and expired sessions never reach archive content', asy
     const response = await onRequest(context({ cookie, env, next: () => { called = true; return new Response('leak'); } }));
     assert.equal(response.status, 302);
     assert.equal(called, false);
+  }
+});
+
+test('a valid session never reaches archive content when any required admin secret is missing', async () => {
+  const names = ['ADMIN_USERNAME', 'ADMIN_EMAIL', 'ADMIN_PASSWORD_HASH', 'ADMIN_PASSWORD_SALT', 'SESSION_SECRET'];
+  const base = { AUTH_DB: new FakeD1(), ADMIN_USERNAME: 'mio', ADMIN_EMAIL: 'mio@example.test', ADMIN_PASSWORD_HASH: 'hash', ADMIN_PASSWORD_SALT: 'salt', SESSION_SECRET: 'secret' };
+  const token = 'valid-token';
+  const hash = await hashOpaqueValue(base.SESSION_SECRET, token);
+  base.AUTH_DB.sessions.set(hash, { token_hash: hash, expires_at: Math.floor(Date.now() / 1000) + 300 });
+  for (const name of names) {
+    const env = { ...base };
+    delete env[name];
+    let called = false;
+    const response = await onRequest(context({ cookie: token, env, next: () => { called = true; return new Response('leak'); } }));
+    assert.equal(response.status, 503, `${name} must fail closed`);
+    assert.equal(called, false, `${name} must never expose the archive`);
   }
 });
 

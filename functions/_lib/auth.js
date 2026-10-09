@@ -30,6 +30,20 @@ export function normalizeIdentifier(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
 }
 
+export function hasAdminAuthConfig(env) {
+  return Boolean(env?.AUTH_DB
+    && [env?.ADMIN_USERNAME, env?.ADMIN_EMAIL, env?.ADMIN_PASSWORD_HASH, env?.ADMIN_PASSWORD_SALT, env?.SESSION_SECRET]
+      .every((value) => typeof value === 'string' && value.length > 0));
+}
+
+export function administratorAttemptIdentifier(env, identifier) {
+  const normalized = normalizeIdentifier(identifier);
+  return normalized === normalizeIdentifier(env?.ADMIN_USERNAME)
+    || normalized === normalizeIdentifier(env?.ADMIN_EMAIL)
+    ? 'administrator'
+    : normalized;
+}
+
 export async function derivePasswordHash(password, salt) {
   const key = await crypto.subtle.importKey(
     'raw',

@@ -62,6 +62,7 @@ export function initLoginForm() {
 export function initArchiveSessionControls() {
   const label = document.querySelector<HTMLElement>('[data-administrator-label]');
   const logout = document.querySelector<HTMLButtonElement>('[data-logout]');
+  const status = document.querySelector<HTMLElement>('[data-logout-status]');
   if (!label || !logout) return;
   void fetch('/api/auth/session', { headers: { Accept: 'application/json' } })
     .then(async (response) => ({ response, payload: await response.json() as SessionPayload }))
@@ -72,7 +73,19 @@ export function initArchiveSessionControls() {
     .catch(() => { label.textContent = 'Mio'; });
   logout.addEventListener('click', async () => {
     logout.disabled = true;
-    try { await fetch('/api/auth/logout', { method: 'POST', headers: { Accept: 'application/json' } }); }
-    finally { window.location.assign('/login/'); }
+    if (status) { status.textContent = '正在安全退出…'; status.dataset.state = 'loading'; }
+    try {
+      const response = await fetch('/api/auth/logout', { method: 'POST', headers: { Accept: 'application/json' } });
+      const payload = await response.json() as { ok?: boolean };
+      if (!response.ok || !payload.ok) {
+        if (status) { status.textContent = '登出失败，请稍后重试。'; status.dataset.state = 'error'; }
+        logout.disabled = false;
+        return;
+      }
+      window.location.assign('/login/');
+    } catch {
+      if (status) { status.textContent = '连接中断，暂时无法登出。'; status.dataset.state = 'error'; }
+      logout.disabled = false;
+    }
   });
 }
