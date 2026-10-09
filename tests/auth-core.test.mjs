@@ -110,4 +110,3 @@ test('rejects missing and cross-site Origin headers', () => {
     );
   }
 });
-

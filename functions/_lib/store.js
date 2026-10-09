@@ -64,4 +64,3 @@ export async function recordFailure(db, fingerprint, now) {
 export async function clearFailures(db, fingerprint) {
   return db.prepare('DELETE FROM auth_attempts WHERE fingerprint = ?').bind(fingerprint).run();
 }
-

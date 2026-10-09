@@ -19,4 +19,3 @@ export async function onRequestGet({ request, env }) {
     return json({ authenticated: false }, 503);
   }
 }
-

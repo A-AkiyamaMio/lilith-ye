@@ -76,4 +76,3 @@ test('missing runtime bindings and D1 errors fail closed', async () => {
   assert.equal(response.status, 503);
   assert.equal(called, false);
 });
-

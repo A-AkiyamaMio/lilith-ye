@@ -38,4 +38,3 @@ test('archive layout shows administrator identity and an explicit logout control
   assert.match(layout, /data-logout/u);
   assert.match(layout, /initArchiveSessionControls/u);
 });
-

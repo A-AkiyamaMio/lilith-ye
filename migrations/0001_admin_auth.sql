@@ -17,4 +17,3 @@ CREATE TABLE IF NOT EXISTS auth_attempts (
 
 CREATE INDEX IF NOT EXISTS idx_auth_attempts_blocked_until
   ON auth_attempts (blocked_until);
-

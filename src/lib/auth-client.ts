@@ -76,4 +76,3 @@ export function initArchiveSessionControls() {
     finally { window.location.assign('/login/'); }
   });
 }
-
