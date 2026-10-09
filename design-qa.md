@@ -30,5 +30,5 @@
 - 登录请求体按流读取并在超过 8 KiB 时取消后续读取。
 - `/archive` 及子路由经过会话中间件；会话无效、绑定缺失或 D1 异常时不调用静态档案响应；公开路径不进入 Functions。
 - 本地验证：`pnpm test` 53/53 通过；审查修复包含完整 30 分钟封锁、用户名/邮箱共用限流指纹、完整配置缺失时失败关闭、登出失败不清 Cookie、超限流取消失败仍返回 413，以及有界认证记录清理。
-- 发布镜像验证：`pnpm run publish:root` 成功；根目录包含 `login/index.html` 与 `_routes.json`，`functions/` 和 `migrations/` 保持原位。
-- 线上验证未完成：Wrangler 未登录；D1 迁移、Preview/Production 的 `AUTH_DB` 与加密 Secrets、GitHub `main` 发布及 Cloudflare 路由检查均待授权后执行。
+- Pages 安全发布调整：构建产物固定为 `dist/`，Functions 与迁移保留在仓库根目录；移除把页面复制到根目录的旧发布脚本。
+- 线上验证待完成：需确认 Preview 使用独立 `AUTH_DB`、正式环境 D1 迁移已应用，并检查 Preview/Production 路由及私密文件不可访问。

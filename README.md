@@ -11,7 +11,7 @@ npm run dev
 
 生产构建使用 `npm run build`，本地检查构建结果使用 `npm run preview`，测试使用 `npm test`。
 
-当前 Cloudflare Pages 项目直接发布仓库根目录。发布前运行 `pnpm run publish:root`，它会先构建 Astro，再把生产页面与静态资源同步到根目录发布镜像。
+Cloudflare Pages 在仓库根目录运行 `pnpm run build`，只发布 `dist/`；Pages Functions 与 D1 迁移仍从仓库根目录读取。不要把 Astro 构建产物同步回仓库根目录发布。
 
 ## 内容维护
 
@@ -26,7 +26,7 @@ npm run dev
 
 私人档案使用 Cloudflare Pages Functions 与 D1 会话验证保护。`/archive` 和 `/archive/*` 必须由 `functions/_middleware.js` 拦截；`public/_routes.json` 将 Functions 执行限制在档案及 `/api/auth/*`，公开展览和静态资源继续直接由 Pages 提供。
 
-部署前先为 Pages 项目绑定现有 D1 数据库 `lilith-ye-db`，绑定名称为 `AUTH_DB`，并在 Preview 与 Production 环境分别设置以下加密 Secrets：
+Preview 与 Production 分别绑定独立的 D1 数据库（绑定名称均为 `AUTH_DB`），并分别设置以下加密 Secrets：
 
 - `ADMIN_USERNAME`
 - `ADMIN_EMAIL`
@@ -42,7 +42,7 @@ npm run dev
 wrangler d1 migrations apply lilith-ye-db --remote
 ```
 
-用 `wrangler pages secret put <SECRET_NAME> --project-name lilith-ye` 添加加密 Secret。不要把 Secret 值作为命令参数；在提示符中输入。先发布 Preview 并验证登录、注销及全部档案路由，再发布 Production。缺少 Secrets 或 D1 时，档案中间件会返回不可用响应，不会放行静态档案。
+用 `wrangler pages secret put <SECRET_NAME> --project-name lilith-ye` 添加加密 Secret。不要把 Secret 值作为命令参数；在提示符中输入。先发布 Preview 并验证登录、注销及全部档案路由，再发布 Production。缺少 Secrets 或 D1 时，档案中间件会返回不可用响应，不会放行静态档案。Pages 发布目录必须保持为 `dist`，不要发布仓库根目录。
 
 ## 安全
 
